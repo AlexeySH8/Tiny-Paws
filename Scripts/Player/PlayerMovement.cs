@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private byte _maxJumpCount;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpForce;
-    private float _yVelReleasedMod = 2f;
+    private float _yVelReleasedMod = 5f;
     private byte _currentJumpCount;
     private Rigidbody2D _rb;
 
@@ -19,9 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public void Move(float horizontalInput)
     {
         _rb.velocity = new Vector2(horizontalInput * _moveSpeed, _rb.velocity.y);
-        if (horizontalInput != 0)
-            transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
-    }  
+    }
 
     public void Jump(bool isOnGround)
     {

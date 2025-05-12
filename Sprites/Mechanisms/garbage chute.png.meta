@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 12
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,13 +37,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +52,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -147,18 +147,194 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: garbage chute_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1654.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94b5a78adccb02f4dab1801a07026fe5
+      internalID: -1771737791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1418.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10852fb1442f0804bbc1d30023374ef8
+      internalID: -421440380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1182.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3dc706e3151e4b46a8cde1677805463
+      internalID: 1889378396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 946.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87b41e69d34aedf47b5c7a61f7decb90
+      internalID: 564038561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 710.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47ac8ac540a7512429bd8155acdbb3e9
+      internalID: 168445312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 474.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c6857404bebe44e93e8c4fb76e07b9
+      internalID: 1382577454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 238.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30658e6c41dad4142965bc4d8254c726
+      internalID: -292439831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: garbage chute_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2.625
+        width: 473
+        height: 236.375
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea5c55e952ea46c428581bef8309a003
+      internalID: -1202950935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      garbage chute_0: -1771737791
+      garbage chute_1: -421440380
+      garbage chute_2: 1889378396
+      garbage chute_3: 564038561
+      garbage chute_4: 168445312
+      garbage chute_5: 1382577454
+      garbage chute_6: -292439831
+      garbage chute_7: -1202950935
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
