@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
 
     public PlayerState CurrentState { get; private set; }
+    public float FaceDirection { get; private set; }
     public LayerMask Ground;
 
     [SerializeField] private GameObject _groundCheck;
@@ -12,10 +13,14 @@ public class PlayerController : MonoBehaviour
     private float _minProcessedValue = 0.1f;
     private IPlayerInput _input;
     private PlayerMovement _movement;
+    private PlayerVisual _visual;
     private Rigidbody2D _rb;
-    private float _groundCheckRadius;
+    private float _faceLadderDirection;
     private float _horizontalInput;
+    private byte _currentJumpCount;
+    private float _groundCheckRadius;
     private bool _isJumpRequested;
+    private bool _isLadder;
     private bool _canMove;
 
     private void Awake()
@@ -42,6 +47,7 @@ public class PlayerController : MonoBehaviour
         #endregion
         _rb = GetComponent<Rigidbody2D>();
         _movement = GetComponent<PlayerMovement>();
+        _visual = GetComponentInChildren<PlayerVisual>();
         _groundCheckRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
         EnableMovement();
     }
@@ -49,14 +55,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         _horizontalInput = _input.GetHorizontal();
-        Flip();
+        if (_horizontalInput != 0)
+            FaceDirection = Mathf.Sign(_horizontalInput);
 
         if (_input.IsJumpInput())
             _isJumpRequested = true;
 
         if (_input.IsJumpInputReleased())
             _movement.HandleJumpRelease();
-
         UpdateState();
     }
 
@@ -67,9 +73,14 @@ public class PlayerController : MonoBehaviour
             if (_isJumpRequested)
             {
                 _isJumpRequested = false;
-                _movement.Jump(IsOnGround());
+                _isLadder = false;
+                _movement.Jump(IsOnGround(), ref _currentJumpCount);
+                Debug.Log(_currentJumpCount);
             }
-            _movement.Move(_horizontalInput);
+            if (_isLadder)
+                _movement.Climb(_horizontalInput, _faceLadderDirection);
+            else
+                _movement.Move(_horizontalInput);
         }
     }
 
@@ -91,15 +102,42 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Flip()
+    public bool IsOnGround()
     {
-        if (_horizontalInput != 0)
-            transform.localScale = new Vector3(Mathf.Sign(_horizontalInput), 1, 1);
+        var result = Physics2D.OverlapCircle(_groundCheck.transform.position, _groundCheckRadius, Ground);
+        if (result)
+            _currentJumpCount = 0;
+        return result;
     }
 
-    public bool IsOnGround() => Physics2D.OverlapCircle(_groundCheck.transform.position, _groundCheckRadius, Ground);
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+            EnterClimb();
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+            ExitClimb();
+    }
+
+    private void EnterClimb()
+    {
+        _isLadder = true;
+        _visual.EnterClimb(FaceDirection);
+        _faceLadderDirection = FaceDirection;
+    }
+
+    private void ExitClimb()
+    {
+        _isLadder = false;
+        _movement.ExitClimb();
+        _visual.ExitClimb();
+    }
 
     private void EnableMovement() => _canMove = true;
 
     private void DisableMovement() => _canMove = false;
+
 }

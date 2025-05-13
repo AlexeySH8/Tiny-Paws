@@ -5,9 +5,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private byte _maxJumpCount;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpForce;
-    private float _yVelReleasedMod = 5f;
-    private byte _currentJumpCount;
     private Rigidbody2D _rb;
+    private float _yVelReleasedMod = 5f;
 
     private void Start()
     {
@@ -19,18 +18,29 @@ public class PlayerMovement : MonoBehaviour
         _rb.velocity = new Vector2(horizontalInput * _moveSpeed, _rb.velocity.y);
     }
 
-    public void Jump(bool isOnGround)
+    public void Jump(bool isOnGround, ref byte currentJumpCount)
     {
         if (isOnGround)
         {
-            _currentJumpCount = 0;
+            currentJumpCount = 0;
             MakeJump();
         }
-        else if (_currentJumpCount < _maxJumpCount)
+        else if (currentJumpCount < _maxJumpCount)
         {
             MakeJump();
-            _currentJumpCount++;
+            currentJumpCount++;
         }
+    }
+
+    public void Climb(float horizontalInput, float faceDirection)
+    {
+        _rb.gravityScale = 0;
+        _rb.velocity = new Vector2(_rb.velocity.x, horizontalInput * _moveSpeed * faceDirection);
+    }
+
+    public void ExitClimb()
+    {
+        _rb.gravityScale = 4;
     }
 
     public void HandleJumpRelease()
@@ -40,4 +50,5 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void MakeJump() => _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+
 }

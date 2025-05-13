@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GarbageSpawner : MonoBehaviour
@@ -10,16 +11,25 @@ public class GarbageSpawner : MonoBehaviour
         Right = 1
     }
 
-    [SerializeField] private List<GameObject> _garbagePrefabs;
+    [Header("Prefab Lists")]
+    [SerializeField] private List<GameObject> _cartonPrefabs;
+    [SerializeField] private List<GameObject> _ironPrefabs;
+    [SerializeField] private List<GameObject> _barrelPrefabs;
+
+    [Header("Spawn Chances (0-100)")]
+    [SerializeField][Range(0, 100)] private int _cartonChance = 60;
+    [SerializeField][Range(0, 100)] private int _ironChance = 30;
+    [SerializeField][Range(0, 100)] private int _barrelChance = 10;
+
     [SerializeField] private SpawnDirection _spawnDirection;
     private Animator _animator;
 
-    private float _minTimeToResp = 0.8f;
-    private float _maxTimeToResp = 1.8f;
+    private float _minTimeToResp = 0.4f;
+    private float _maxTimeToResp = 0.8f;
 
     private float _minReboundForce = 1.0f;
-    private float _maxReboundForce = 8000.0f;
-    private float _maxTorqueForce = 10;
+    private float _maxReboundForce = 13000.0f;
+    private float _maxTorqueForce = 20;
 
     private void Start()
     {
@@ -35,14 +45,43 @@ public class GarbageSpawner : MonoBehaviour
         {
             float timeToNextObstacle = Random.Range(_minTimeToResp, _maxTimeToResp);
             yield return new WaitForSeconds(timeToNextObstacle);
+
             _animator.Play("Garbage Disposal", 0, 0f);
-            var garbagePrefab = _garbagePrefabs[Random.Range(0, _garbagePrefabs.Count)];
-            var instance = Instantiate(garbagePrefab, transform.position, garbagePrefab.transform.rotation);
-            ImpulseToGrbage(instance);
+
+            var garbagePrefab = GetRandomGarbagePrefab();
+
+            if (garbagePrefab != null)
+            {
+                var instance = Instantiate(garbagePrefab, transform.position, garbagePrefab.transform.rotation);
+                ImpulseToGarbage(instance);
+            }
         }
     }
 
-    private void ImpulseToGrbage(GameObject instance)
+    private GameObject GetRandomGarbagePrefab()
+    {
+        int random = Random.Range(0, 100);
+
+        if (random < _cartonChance && _cartonPrefabs.Count > 0)
+        {
+            return _cartonPrefabs[Random.Range(0, _cartonPrefabs.Count)];
+        }
+        else if (random < _cartonChance + _ironChance && _ironPrefabs.Count > 0)
+        {
+            return _ironPrefabs[Random.Range(0, _ironPrefabs.Count)];
+        }
+        else if (_barrelPrefabs.Count > 0)
+        {
+            return _barrelPrefabs[Random.Range(0, _barrelPrefabs.Count)];
+        }
+        else
+        {
+            Debug.LogError("The list of prefabs is empty");
+            return null;
+        }
+    }
+
+    private void ImpulseToGarbage(GameObject instance)
     {
         var rb = instance.GetComponent<Rigidbody2D>();
 
@@ -51,4 +90,15 @@ public class GarbageSpawner : MonoBehaviour
 
         rb.AddTorque(Random.Range(-_maxTorqueForce, _maxTorqueForce), ForceMode2D.Impulse);
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        int total = _cartonChance + _ironChance + _barrelChance;
+        if (total != 100)
+        {
+            Debug.LogError($"The sum of the chances must be equal to 100, now: {total}");
+        }
+    }
+#endif
 }
