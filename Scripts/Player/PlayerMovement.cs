@@ -3,8 +3,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private byte _maxJumpCount;
-    [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _jumpForce;
+    [SerializeField] private float _moveSpeed; // 25
+    [SerializeField] private float _jumpForce; // 30
     private Rigidbody2D _rb;
     private float _yVelReleasedMod = 5f;
 

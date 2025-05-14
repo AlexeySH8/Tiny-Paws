@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7851317763693937266}
   - component: {fileID: 3758652500797833108}
   - component: {fileID: 5718779061069944394}
+  - component: {fileID: 9179552319767965725}
   m_Layer: 3
   m_Name: barrel exploding
   m_TagString: Untagged
@@ -171,3 +172,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997aed463e7da9b42bf9c4582e0ebffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9179552319767965725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751048078718955238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc5e98130e5691498542d5cbce0bebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 10
+  _force: 80000

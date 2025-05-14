@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (Mathf.Abs(_horizontalInput) > _minProcessedValue)
+            if (Mathf.Abs(_horizontalInput) > _minProcessedValue || _isLadder)
                 CurrentState = PlayerState.Running;
             else
                 CurrentState = PlayerState.Idle;
