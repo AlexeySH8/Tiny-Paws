@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement _movement;
     private PlayerVisual _visual;
     private Rigidbody2D _rb;
+    private Coroutine _disableMovementCoroutine;
     private float _faceLadderDirection;
     private float _horizontalInput;
     private byte _currentJumpCount;
@@ -23,15 +25,15 @@ public class PlayerController : MonoBehaviour
     private bool _isLadder;
     private bool _canMove;
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+    //private void Awake()
+    //{
+    //    if (Instance != null && Instance != this)
+    //    {
+    //        Destroy(gameObject);
+    //        return;
+    //    }
+    //    Instance = this;
+    //}
 
     private void Start()
     {
@@ -54,15 +56,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        _horizontalInput = _input.GetHorizontal();
-        if (_horizontalInput != 0)
-            FaceDirection = Mathf.Sign(_horizontalInput);
+        if (_canMove)
+        {
+            _horizontalInput = _input.GetHorizontal();
+            if (_horizontalInput != 0)
+                FaceDirection = Mathf.Sign(_horizontalInput);
 
-        if (_input.IsJumpInput())
-            _isJumpRequested = true;
+            if (_input.IsJumpInput())
+                _isJumpRequested = true;
 
-        if (_input.IsJumpInputReleased())
-            _movement.HandleJumpRelease();
+            if (_input.IsJumpInputReleased())
+                _movement.HandleJumpRelease();
+        }
         UpdateState();
     }
 
@@ -75,7 +80,6 @@ public class PlayerController : MonoBehaviour
                 _isJumpRequested = false;
                 _isLadder = false;
                 _movement.Jump(IsOnGround(), ref _currentJumpCount);
-                Debug.Log(_currentJumpCount);
             }
             if (_isLadder)
                 _movement.Climb(_horizontalInput, _faceLadderDirection);
@@ -136,8 +140,22 @@ public class PlayerController : MonoBehaviour
         _visual.ExitClimb();
     }
 
-    private void EnableMovement() => _canMove = true;
+    public void DisableMovementTemporarily(float duration)
+    {
+        if (_disableMovementCoroutine != null)
+            StopCoroutine(_disableMovementCoroutine);
 
-    private void DisableMovement() => _canMove = false;
+        _disableMovementCoroutine = StartCoroutine(DisableMovementTemporarilyCoroutine(duration));
+    }
 
+    private IEnumerator DisableMovementTemporarilyCoroutine(float duration)
+    {
+        DisableMovement();
+        yield return new WaitForSeconds(duration);
+        EnableMovement();
+    }
+
+    public void EnableMovement() => _canMove = true;
+
+    public void DisableMovement() => _canMove = false;
 }

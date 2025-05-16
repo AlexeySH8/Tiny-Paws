@@ -6,11 +6,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _moveSpeed; // 25
     [SerializeField] private float _jumpForce; // 30
     private Rigidbody2D _rb;
+    private float _originalGravityScale;
     private float _yVelReleasedMod = 5f;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _originalGravityScale = _rb.gravityScale;
     }
 
     public void Move(float horizontalInput)
@@ -40,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ExitClimb()
     {
-        _rb.gravityScale = 4;
+        _rb.gravityScale = _originalGravityScale;
     }
 
     public void HandleJumpRelease()

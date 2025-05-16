@@ -9,8 +9,10 @@ public class Explosion : MonoBehaviour
 
     private byte _damage = 3;
     private float _delayBeforeExplosion = 1;
-    private float _minTimeToSelfExplosion = 1;
-    private float _maxTimeToSelfExplosion = 35;
+    private float _minSelfExplodeTime = 1;
+    private float _maxSelfExplodeTime = 35;
+    private float _offsetForPlayer = 3f;
+    private float _disableMovementDuration = 0.5f;
     private bool _hasExploded;
 
     private void Start()
@@ -28,7 +30,7 @@ public class Explosion : MonoBehaviour
 
     private IEnumerator SelfExplosionCoroutine()
     {
-        yield return new WaitForSeconds(Random.Range(_minTimeToSelfExplosion, _maxTimeToSelfExplosion));
+        yield return new WaitForSeconds(Random.Range(_minSelfExplodeTime, _maxSelfExplodeTime));
         Explode();
     }
 
@@ -56,9 +58,13 @@ public class Explosion : MonoBehaviour
         if (collider.TryGetComponent(out Rigidbody2D rb))
         {
             Vector2 direction = (collider.transform.position - transform.position).normalized;
-            float distance = Mathf.Max(Vector2.Distance(rb.position, transform.position), 0.01f);
-            //float explosionForce = _force / distance;
-            rb.AddForce(direction * _force);
+            var explosionForce = direction * _force;
+            if (rb.TryGetComponent(out PlayerController player))
+            {
+                explosionForce /= _offsetForPlayer;
+                player.DisableMovementTemporarily(_disableMovementDuration);
+            }
+            rb.AddForce(explosionForce);
         }
 
         if (collider.TryGetComponent(out Health health))
