@@ -1,11 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class ExplosionBarrel : MonoBehaviour
 {
     [SerializeField] float _radius;
     [SerializeField] float _force;
     [SerializeField] bool _isExploded;
+    [SerializeField] GameObject _explosionEffectPref;
 
     private byte _damage = 3;
     private float _delayBeforeExplosion = 1;
@@ -50,6 +51,7 @@ public class Explosion : MonoBehaviour
         foreach (Collider2D collider in overlappedColliders)
             ApplyExplosionEffects(collider);
 
+        Instantiate(_explosionEffectPref, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 
@@ -70,7 +72,7 @@ public class Explosion : MonoBehaviour
         if (collider.TryGetComponent(out Health health))
             health.TakeDamage(_damage);
 
-        if (collider.TryGetComponent(out Explosion explosion))
+        if (collider.TryGetComponent(out ExplosionBarrel explosion))
             explosion.Explode();
     }
 

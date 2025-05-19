@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6053273910267566672}
   - component: {fileID: 6753541313800347626}
   m_Layer: 0
-  m_Name: Poison
+  m_Name: PoisonEffectPref
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: -1482532907, guid: 866da500b0b0e0a4191d2aa6c5ed12b6, type: 3}
   m_Color: {r: 0.6313726, g: 0.9137255, b: 0.30588236, a: 1}
   m_FlipX: 0
