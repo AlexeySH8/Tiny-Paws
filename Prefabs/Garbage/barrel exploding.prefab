@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3758652500797833108}
   - component: {fileID: 5718779061069944394}
   - component: {fileID: 9179552319767965725}
+  - component: {fileID: 3064178549080585234}
   m_Layer: 3
   m_Name: barrel exploding
   m_TagString: Untagged
@@ -184,7 +185,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdc5e98130e5691498542d5cbce0bebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _radius: 15
+  maxHealth: 3
+  radius: 15
+  damage: 3
   _force: 200000
-  _isExploded: 0
   _explosionEffectPref: {fileID: 2181408092534801807, guid: 695f323d512abef4983c481ce5eeac40, type: 3}
+--- !u!95 &3064178549080585234
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751048078718955238}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 78d72804b985b2948a41d22b81e9858d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -21,8 +21,13 @@ public class GarbageSpawner : MonoBehaviour
     [SerializeField][Range(0, 100)] private int _ironChance = 30;
     [SerializeField][Range(0, 100)] private int _barrelChance = 10;
 
+    [SerializeField] private int _initialGarbageAmount;
     [SerializeField] private SpawnDirection _spawnDirection;
     private Animator _animator;
+
+    private float _xBorder = 30;
+    private float _yMinBorder = 40;
+    private float _yMaxBorder = 340;
 
     private float _minTimeToResp = 0.4f;
     private float _maxTimeToResp = 0.8f;
@@ -34,7 +39,21 @@ public class GarbageSpawner : MonoBehaviour
     private void Start()
     {
         _animator = GetComponentInParent<Animator>();
+        LoadInitialGarbage();
         SpawnGrbage();
+    }
+
+    private void LoadInitialGarbage()
+    {
+        for (int i = 0; i <= _initialGarbageAmount; i++)
+        {
+            var randomPos = new Vector3(
+                Random.Range(_xBorder, -_xBorder),
+                Random.Range(_yMinBorder, _yMaxBorder),
+                0);
+            var garbagePrefab = GetRandomGarbagePrefab();
+            Instantiate(garbagePrefab, randomPos, garbagePrefab.transform.rotation);
+        }
     }
 
     private void SpawnGrbage() => StartCoroutine(SpawnGrbageCoroutine());

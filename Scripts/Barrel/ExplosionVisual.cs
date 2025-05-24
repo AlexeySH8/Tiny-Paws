@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ExplosionVisual : MonoBehaviour
 {
-    [SerializeField] GameObject _shockWave;
+    [SerializeField] private GameObject _shockWave;
     private float _animationDuration;
     private Material _material;
     private Coroutine _shockWaveCoroutine;
@@ -19,7 +19,7 @@ public class ExplosionVisual : MonoBehaviour
     void Start()
     {
         _animationDuration = GetAnimationDuration();
-        DestroyAfterAnimation();
+        Destroy(gameObject, _animationDuration);
         CallShockWave();
     }
 
@@ -29,17 +29,15 @@ public class ExplosionVisual : MonoBehaviour
     {
         _material.SetFloat(_waveDistanceFromCenter, startPos);
         float lerpedAmount = 0f;
-        float elipsedTime = 0f;
-        while (elipsedTime < _animationDuration)
+        float elapsedTime = 0f;
+        while (elapsedTime < _animationDuration)
         {
-            elipsedTime += Time.deltaTime;
-            lerpedAmount = Mathf.Lerp(startPos, endPos, (elipsedTime / _animationDuration));
+            elapsedTime += Time.deltaTime;
+            lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / _animationDuration));
             _material.SetFloat(_waveDistanceFromCenter, lerpedAmount);
             yield return null;
         }
     }
-
-    private void DestroyAfterAnimation() => Destroy(gameObject, _animationDuration);
 
     private float GetAnimationDuration()
     {

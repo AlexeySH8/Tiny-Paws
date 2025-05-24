@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6474886547479802574}
   - component: {fileID: 1369429768404095624}
   - component: {fileID: 7535550921904624445}
+  - component: {fileID: 9152753238017604113}
   m_Layer: 3
   m_Name: barrel poison
   m_TagString: Untagged
@@ -171,3 +172,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 997aed463e7da9b42bf9c4582e0ebffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9152753238017604113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166192929044799987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0b20f3e47cd6724bab9b2da71429738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3
+  radius: 7
+  damage: 1
+  _isActivated: 0
+  _poisonEffectPref: {fileID: 8775348145068564315, guid: 4895cb65b2f262f41b0dd47532130f37, type: 3}
+  _poisonInterval: 1

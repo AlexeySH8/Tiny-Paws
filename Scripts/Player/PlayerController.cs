@@ -9,11 +9,14 @@ public class PlayerController : MonoBehaviour
     public float FaceDirection { get; private set; }
     public LayerMask Ground;
 
+    [SerializeField] private float _fallDamageThreshold;
     [SerializeField] private GameObject _groundCheck;
 
-    private float _minProcessedValue = 0.1f;
+    private float _minProcessedValue = 0.2f;
+    private float _yPreviousPos;
     private IPlayerInput _input;
     private PlayerMovement _movement;
+    private PlayerHealth _health;
     private PlayerVisual _visual;
     private Rigidbody2D _rb;
     private Coroutine _disableMovementCoroutine;
@@ -25,15 +28,16 @@ public class PlayerController : MonoBehaviour
     private bool _isLadder;
     private bool _canMove;
 
-    //private void Awake()
-    //{
-    //    if (Instance != null && Instance != this)
-    //    {
-    //        Destroy(gameObject);
-    //        return;
-    //    }
-    //    Instance = this;
-    //}
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        _yPreviousPos = transform.position.y;
+    }
 
     private void Start()
     {
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _movement = GetComponent<PlayerMovement>();
         _visual = GetComponentInChildren<PlayerVisual>();
+        _health = GetComponent<PlayerHealth>();
         _groundCheckRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
         EnableMovement();
     }
@@ -110,7 +115,13 @@ public class PlayerController : MonoBehaviour
     {
         var result = Physics2D.OverlapCircle(_groundCheck.transform.position, _groundCheckRadius, Ground);
         if (result)
+        {
+            var height = _yPreviousPos - transform.position.y;
+            if (height > _fallDamageThreshold)
+                _health.FallDamage((int)Mathf.Floor(height / _fallDamageThreshold));
             _currentJumpCount = 0;
+            _yPreviousPos = transform.position.y;
+        }
         return result;
     }
 

@@ -1,44 +1,31 @@
 using System.Collections;
 using UnityEngine;
 
-public class ExplosionBarrel : MonoBehaviour
+public class ExplosionBarrel : BaseBarrel
 {
-    [SerializeField] float _radius;
-    [SerializeField] float _force;
-    [SerializeField] bool _isExploded;
-    [SerializeField] GameObject _explosionEffectPref;
+    [SerializeField] private float _force;
+    [SerializeField] private GameObject _explosionEffectPref;
 
-    private byte _damage = 3;
     private float _delayBeforeExplosion = 1;
-    private float _minSelfExplodeTime = 1;
-    private float _maxSelfExplodeTime = 35;
     private float _offsetForPlayer = 3f;
     private float _disableMovementDuration = 0.5f;
-    private bool _hasExploded;
+    private Animator _animator;
 
-    private void Start()
+    protected override void Start()
     {
-        SelfExplosion();
+        base.Start();
+        _animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
-        if (_isExploded)
-            Explode();
-    }
+    public override void BarrelEffect() => Explode();
 
-    private void SelfExplosion() => StartCoroutine(SelfExplosionCoroutine());
-
-    private IEnumerator SelfExplosionCoroutine()
-    {
-        yield return new WaitForSeconds(Random.Range(_minSelfExplodeTime, _maxSelfExplodeTime));
-        Explode();
-    }
+    public override void ReactToDeath() => Explode();
 
     public void Explode()
     {
-        if (_hasExploded) return;
-        _hasExploded = true;
+        if (hasActivated) return;
+        hasActivated = true;
+        _animator.SetBool("HasActivated", hasActivated);
         StartCoroutine(ExplodeCoroutine());
     }
 
@@ -46,7 +33,7 @@ public class ExplosionBarrel : MonoBehaviour
     {
         yield return new WaitForSeconds(_delayBeforeExplosion);
 
-        Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, _radius);
+        Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, radius);
 
         foreach (Collider2D collider in overlappedColliders)
             ApplyExplosionEffects(collider);
@@ -69,22 +56,7 @@ public class ExplosionBarrel : MonoBehaviour
             rb.AddForce(explosionForce);
         }
 
-        if (collider.TryGetComponent(out Health health))
-            health.TakeDamage(_damage);
-
-        if (collider.TryGetComponent(out ExplosionBarrel explosion))
-            explosion.Explode();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-            Explode();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _radius);
+        if (collider.TryGetComponent(out BaseHealth health))
+            health.TakeDamage(damage);
     }
 }
