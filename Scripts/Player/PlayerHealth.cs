@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerHealth : BaseHealth
 {
-    //public event Action<float> OnHPChanged;
+    public event Action<int, int> OnPlayerTakeDamage;
 
     [SerializeField] private bool _canTakeDamage;
     [SerializeField] private int _fallDamage;
@@ -15,8 +13,7 @@ public class PlayerHealth : BaseHealth
         if (_canTakeDamage)
         {
             base.TakeDamage(damage);
-            Debug.Log("Player get " + damage + " damage");
-            //OnHPChanged.Invoke(GetCurrentHPAsPercantage());
+            OnPlayerTakeDamage.Invoke(currentHP, damage);
         }
     }
 
@@ -26,6 +23,4 @@ public class PlayerHealth : BaseHealth
     {
         Debug.Log("Player is Dead");
     }
-
-    private float GetCurrentHPAsPercantage() => (float)currentHealth / (float)maxHealth;
 }

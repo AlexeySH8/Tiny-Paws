@@ -39,6 +39,21 @@ public class GarbageSpawner : MonoBehaviour
     private void Start()
     {
         _animator = GetComponentInParent<Animator>();
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnGameStart += StartSpawnGarbage;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStart -= StartSpawnGarbage;
+    }
+
+    private void StartSpawnGarbage()
+    {
         LoadInitialGarbage();
         SpawnGrbage();
     }

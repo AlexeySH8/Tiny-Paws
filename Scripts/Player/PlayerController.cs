@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public static PlayerController Instance { get; private set; }
+    //public static PlayerController Instance { get; private set; }
 
     public PlayerState CurrentState { get; private set; }
     public float FaceDirection { get; private set; }
@@ -30,17 +30,12 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        _yPreviousPos = transform.position.y;
-    }
-
-    private void Start()
-    {
+        //if (Instance != null && Instance != this)
+        //{
+        //    Destroy(gameObject);
+        //    return;
+        //}
+        //Instance = this;
         #region Input
         // var mobileInput = FindObjectOfType<MobileInput>();
 
@@ -51,12 +46,23 @@ public class PlayerController : MonoBehaviour
         _input = new PCInput();
 #endif
         #endregion
+        _yPreviousPos = transform.position.y;
         _rb = GetComponent<Rigidbody2D>();
         _movement = GetComponent<PlayerMovement>();
         _visual = GetComponentInChildren<PlayerVisual>();
         _health = GetComponent<PlayerHealth>();
         _groundCheckRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
-        EnableMovement();
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnGameStart += EnableMovement;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStart -= EnableMovement;
     }
 
     private void Update()

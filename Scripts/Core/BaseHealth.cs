@@ -3,18 +3,18 @@ using UnityEngine;
 public abstract class BaseHealth : MonoBehaviour
 {
     [SerializeField] protected int maxHealth;
-    protected int currentHealth;
+    protected int currentHP;
 
     private void Awake()
     {
-        currentHealth = maxHealth;
+        currentHP = maxHealth;
     }
 
     public virtual void TakeDamage(int damage)
     {
         if (IsDead()) return;
 
-        currentHealth -= damage;
+        currentHP -= damage;
 
         if (IsDead())
             ReactToDeath();
@@ -22,5 +22,5 @@ public abstract class BaseHealth : MonoBehaviour
 
     public abstract void ReactToDeath();
 
-    private bool IsDead() => currentHealth <= 0;
+    private bool IsDead() => currentHP <= 0;
 }
