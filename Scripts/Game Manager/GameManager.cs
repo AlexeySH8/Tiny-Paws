@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
     public event Action OnGameStart;
+    public event Action OnGameOver;
 
     private void Awake()
     {
@@ -20,5 +19,16 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    public void StartGame() => OnGameStart?.Invoke();
+    public void GameStart() => OnGameStart?.Invoke();
+
+    public void GameOver()
+    {
+        OnGameOver?.Invoke();
+        GameRestart();
+    }
+
+    public void GameRestart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

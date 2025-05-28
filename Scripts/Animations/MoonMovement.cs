@@ -15,11 +15,11 @@ public class MoonMovement : MonoBehaviour
 
     private void MoveMoon()
     {
-        if (transform.position.x > _xMaxBorder)
-            _movingRight = true;
-        else if (transform.position.x < _xMinBorder)
+        if (transform.position.x >= _xMaxBorder)
             _movingRight = false;
-        var direction = _movingRight ? 1f : -1f;
+        else if (transform.position.x <= _xMinBorder)
+            _movingRight = true;
+        float direction = _movingRight ? 1f : -1f;
         transform.position += Vector3.right * direction * _speed * Time.deltaTime;
     }
 }

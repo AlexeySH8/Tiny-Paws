@@ -52,6 +52,10 @@ public class PlayerController : MonoBehaviour
         _visual = GetComponentInChildren<PlayerVisual>();
         _health = GetComponent<PlayerHealth>();
         _groundCheckRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
+    }
+
+    private void Start()
+    {
         SubscribeToEvents();
     }
 

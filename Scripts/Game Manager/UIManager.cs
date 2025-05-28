@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _menuUI;
     [SerializeField] private GameObject _playerHpUI;
+    [SerializeField] private TextMeshProUGUI _titleText;
     [SerializeField] private TextMeshProUGUI _hpText;
 
     private PlayerHealth _playerHealth;
@@ -13,21 +14,30 @@ public class UIManager : MonoBehaviour
     {
         _playerHealth = FindFirstObjectByType<PlayerHealth>();
         ShowMenu();
+    }
+
+    private void Start()
+    {
         SubscribeToEvents();
     }
 
     private void SubscribeToEvents()
     {
-        GameManager.Instance.OnGameStart += ShowHUD;
-        GameManager.Instance.OnGameStart += HideMenu;
+        GameManager.Instance.OnGameStart += GameStart;
         _playerHealth.OnPlayerTakeDamage += UpdatePlayerHPText;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.OnGameStart -= ShowHUD;
-        GameManager.Instance.OnGameStart -= HideMenu;
+        GameManager.Instance.OnGameStart -= GameStart;
         _playerHealth.OnPlayerTakeDamage -= UpdatePlayerHPText;
+    }
+
+    private void GameStart()
+    {
+        ShowHUD();
+        HideMenu();
+        HideTitle();
     }
 
     private void ShowHUD()
@@ -40,4 +50,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowMenu() => _menuUI.SetActive(true);
     private void HideMenu() => _menuUI.SetActive(false);
+
+    private void ShowTitle() => _titleText.gameObject.SetActive(true);
+    private void HideTitle() => _titleText.gameObject.SetActive(false);
 }
