@@ -62,11 +62,13 @@ public class PlayerController : MonoBehaviour
     private void SubscribeToEvents()
     {
         GameManager.Instance.OnGameStart += EnableMovement;
+        GameManager.Instance.OnGameOver += DisableMovement;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameStart -= EnableMovement;
+        GameManager.Instance.OnGameOver -= DisableMovement;
     }
 
     private void Update()

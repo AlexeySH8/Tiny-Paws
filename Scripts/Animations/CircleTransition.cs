@@ -4,10 +4,12 @@ using UnityEngine.UI;
 
 public class CircleTransition : MonoBehaviour
 {
+    public static CircleTransition Instance;
+    [SerializeField] public string TargetTag;
+
     private const string RADIUS = "_Radius";
     private const string CENTER_X = "_CenterX";
     private const string CENTER_Y = "_CenterY";
-    [SerializeField] GameObject _target;
     [SerializeField] private float _closeDuration;
     [SerializeField] private float _openDuration;
     private Canvas _canvas;
@@ -15,32 +17,41 @@ public class CircleTransition : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
         _canvas = GetComponent<Canvas>();
         _blackScreen = GetComponentInChildren<Image>();
     }
 
-    private void Update()
+    public IEnumerator SceneTransition()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-            CloseBlackScreen();
-        if (Input.GetKeyDown(KeyCode.T))
-            StartCoroutine(OpenBlackScreen());
+        yield return CloseBlackScreenCoroutine();
+        OpenBlackScreen();
     }
 
-    private void CloseBlackScreen()
+    private IEnumerator CloseBlackScreenCoroutine()
     {
         DrawBlackScreen();
-        StartCoroutine(Transition(_closeDuration, 1f, 0f));
+        yield return StartCoroutine(Transition(_closeDuration, 1f, 0f, false));
     }
 
-    private IEnumerator OpenBlackScreen()
+    private void OpenBlackScreen() => StartCoroutine(OpenBlackScreenCoroutine());
+
+    private IEnumerator OpenBlackScreenCoroutine()
     {
-        yield return StartCoroutine(Transition(_openDuration, 0f, 1f));
+        yield return StartCoroutine(Transition(_openDuration, 0f, 1f, true));
         HideBlackScreen();
     }
 
-    private IEnumerator Transition(float duration, float startRadius, float endRadius)
+    private IEnumerator Transition(float duration, float startRadius,
+        float endRadius, bool isMenu)
     {
+        SetTransitionCenter(isMenu);
         float elapsed = 0;
         while (elapsed < duration)
         {
@@ -50,6 +61,28 @@ public class CircleTransition : MonoBehaviour
             _blackScreen.material.SetFloat(RADIUS, radius);
             yield return null;
         }
+    }
+
+    private void SetTransitionCenter(bool isMenu)
+    {
+        float targetUVx = 0.5f;
+        float targetUVy = 0.5f;
+
+        if (!isMenu)
+        {
+            var target = GameObject.FindWithTag(TargetTag);
+            if (!target) Debug.LogError($"TargetTag {TargetTag} not found or empty");
+
+            Vector3 targetScreenPos = Camera.main
+            .WorldToScreenPoint(target.transform.position);
+
+            targetUVx = targetScreenPos.x / Screen.width;
+            targetUVy = targetScreenPos.y / Screen.height;
+        }
+
+        var mat = _blackScreen.material;
+        _blackScreen.material.SetFloat(CENTER_X, targetUVx);
+        _blackScreen.material.SetFloat(CENTER_Y, targetUVy);
     }
 
     private void DrawBlackScreen()
@@ -66,15 +99,6 @@ public class CircleTransition : MonoBehaviour
         if (canvasWidth > canvasHeight)
             squareValue = canvasWidth;
         else squareValue = canvasHeight;
-
-
-        var targetScreenPos = Camera.main.WorldToScreenPoint(_target.transform.position);
-        float targetUVx = targetScreenPos.x / Screen.width;
-        float targetUVy = targetScreenPos.y / Screen.height;
-
-        var mat = _blackScreen.material;
-        _blackScreen.material.SetFloat(CENTER_X, targetUVx);
-        _blackScreen.material.SetFloat(CENTER_Y, targetUVy);
 
         _blackScreen.rectTransform.sizeDelta = new Vector2(squareValue, squareValue);
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,7 +24,13 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        StartCoroutine(GameOverCoroutine());
+    }
+
+    private IEnumerator GameOverCoroutine()
+    {
         OnGameOver?.Invoke();
+        yield return CircleTransition.Instance.SceneTransition(); // OpenBlackScreen() called in parallel
         GameRestart();
     }
 

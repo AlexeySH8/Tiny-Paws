@@ -5,8 +5,24 @@ public class PlayerHealth : BaseHealth
 {
     public event Action<int, int> OnPlayerTakeDamage;
 
-    [SerializeField] private bool _canTakeDamage;
     [SerializeField] private int _fallDamage;
+    [SerializeField] private bool _canTakeDamage;
+
+    private void Start()
+    {
+        DisableTakeDamage();
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnGameStart += EnableTakeDamage;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStart -= EnableTakeDamage;
+    }
 
     public override void TakeDamage(int damage)
     {
@@ -21,6 +37,10 @@ public class PlayerHealth : BaseHealth
 
     public override void ReactToDeath()
     {
-        Debug.Log("Player is Dead");
+        GameManager.Instance.GameOver();
     }
+
+    private void EnableTakeDamage() => _canTakeDamage = true;
+
+    private void DisableTakeDamage() => _canTakeDamage = false;
 }

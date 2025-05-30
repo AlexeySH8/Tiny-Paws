@@ -18,6 +18,9 @@ public class Rain : MonoBehaviour
     [SerializeField] private float _colorChangeDuration;
     [SerializeField] private float _targetWeight; // saturation of blue hue
 
+    [Header("Music")]
+    [SerializeField] private BackgroundMusic _backgroundMusic;
+
     private ParticleSystem _rainParticleSystem;
     private Volume _rainVolume;
     private bool _isRaining;
@@ -43,17 +46,18 @@ public class Rain : MonoBehaviour
         {
             var waitBeforeRain = Random.Range(_minTimeToRain, _maxTimeToRain);
             yield return new WaitForSeconds(waitBeforeRain);
-            yield return StartCoroutine(StartRain());
+            _backgroundMusic.StartRain();
+            yield return StartRain();
         }
     }
 
     private IEnumerator StartRain()
     {
         _rainParticleSystem.Play();
-        yield return StartCoroutine(ChangeColor(_rainVolume.weight, _targetWeight, true));
+        yield return ChangeColor(_rainVolume.weight, _targetWeight, true);
         yield return new WaitForSeconds(_rainDuration);
         _rainParticleSystem.Stop();
-        yield return StartCoroutine(ChangeColor(_rainVolume.weight, 0, false));
+        yield return ChangeColor(_rainVolume.weight, 0, false);
     }
 
     private IEnumerator ChangeColor(float startWeight, float endWeight, bool hasDelay)

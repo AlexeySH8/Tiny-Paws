@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     {
         _playerHealth = FindFirstObjectByType<PlayerHealth>();
         ShowMenu();
+        ShowTitle();
     }
 
     private void Start()
