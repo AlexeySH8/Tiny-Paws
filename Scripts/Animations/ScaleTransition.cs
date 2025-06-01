@@ -19,7 +19,7 @@ public class ScaleTransition : MonoBehaviour
         transform.localScale = Vector3.zero;
         float elapsed = 0;
         while (elapsed < _delay)
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
         StartCoroutine(ScaleInWithDelay());
     }
 
@@ -28,7 +28,7 @@ public class ScaleTransition : MonoBehaviour
         float elapsed = 0;
         while (elapsed < _delay)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             yield return null;
         }
         StartCoroutine(ScaleIn());
@@ -39,7 +39,7 @@ public class ScaleTransition : MonoBehaviour
         float elapsed = 0;
         while (elapsed < _duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             float time = Mathf.Clamp01(elapsed / _duration);
             float curveValue = _curve.Evaluate(time);
             transform.localScale = Vector3.Lerp(Vector3.zero, _targetScale, time);

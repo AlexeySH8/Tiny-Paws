@@ -1,12 +1,16 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject _menuUI;
+    [SerializeField] private Image _background;
     [SerializeField] private GameObject _playerHpUI;
     [SerializeField] private TextMeshProUGUI _titleText;
     [SerializeField] private TextMeshProUGUI _hpText;
+    [SerializeField] private Button _pauseButton;
+    [SerializeField] private GameObject _pauseUI;
 
     private PlayerHealth _playerHealth;
 
@@ -25,12 +29,16 @@ public class UIManager : MonoBehaviour
     private void SubscribeToEvents()
     {
         GameManager.Instance.OnGameStart += GameStart;
+        GameManager.Instance.OnGamePause += GamePause;
+        GameManager.Instance.OnGameResume += GameResume;
         _playerHealth.OnPlayerTakeDamage += UpdatePlayerHPText;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameStart -= GameStart;
+        GameManager.Instance.OnGamePause -= GamePause;
+        GameManager.Instance.OnGameResume -= GameResume;
         _playerHealth.OnPlayerTakeDamage -= UpdatePlayerHPText;
     }
 
@@ -41,9 +49,32 @@ public class UIManager : MonoBehaviour
         HideTitle();
     }
 
+    private void GamePause()
+    {
+        _pauseUI.SetActive(true);
+        HideHUD();
+        ShowBackground();
+        ShowTitle();
+    }
+
+    private void GameResume()
+    {
+        _pauseUI.SetActive(false);
+        ShowHUD();
+        HideBackground();
+        HideTitle();
+    }
+
     private void ShowHUD()
     {
+        _pauseButton.gameObject.SetActive(true);
         _playerHpUI.SetActive(true);
+    }
+
+    private void HideHUD()
+    {
+        _pauseButton.gameObject.SetActive(false);
+        _playerHpUI.SetActive(false);
     }
 
     private void UpdatePlayerHPText(int currentHP, int damageTaken) =>
@@ -54,4 +85,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowTitle() => _titleText.gameObject.SetActive(true);
     private void HideTitle() => _titleText.gameObject.SetActive(false);
+
+    private void ShowBackground() => _background.gameObject.SetActive(true);
+    private void HideBackground() => _background.gameObject.SetActive(false);
 }

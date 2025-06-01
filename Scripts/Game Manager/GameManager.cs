@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     public event Action OnGameStart;
     public event Action OnGameOver;
+    public event Action OnGamePause;
+    public event Action OnGameResume;
 
     private void Awake()
     {
@@ -38,4 +40,8 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void GamePause() => OnGamePause?.Invoke();
+
+    public void GameResume() => OnGameResume?.Invoke();
 }

@@ -19,7 +19,7 @@ public class Rain : MonoBehaviour
     [SerializeField] private float _targetWeight; // saturation of blue hue
 
     [Header("Music")]
-    [SerializeField] private BackgroundMusic _backgroundMusic;
+    [SerializeField] private BackgroundSound _backgroundMusic;
 
     private ParticleSystem _rainParticleSystem;
     private Volume _rainVolume;

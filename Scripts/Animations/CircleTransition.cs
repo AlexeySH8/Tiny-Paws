@@ -55,7 +55,7 @@ public class CircleTransition : MonoBehaviour
         float elapsed = 0;
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             var time = elapsed / duration;
             var radius = Mathf.Lerp(startRadius, endRadius, time);
             _blackScreen.material.SetFloat(RADIUS, radius);

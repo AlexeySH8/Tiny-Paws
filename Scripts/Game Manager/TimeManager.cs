@@ -25,11 +25,14 @@ public class TimeManager : MonoBehaviour
     private void SubscribeToEvents()
     {
         GameManager.Instance.OnGameStart += ResumeGame;
+        GameManager.Instance.OnGamePause += PauseGame;
+        GameManager.Instance.OnGameResume += ResumeGame;
     }
-
     private void OnDisable()
     {
         GameManager.Instance.OnGameStart -= ResumeGame;
+        GameManager.Instance.OnGamePause -= PauseGame;
+        GameManager.Instance.OnGameResume -= ResumeGame;
     }
 
     public void PauseGame() => Time.timeScale = 0;
