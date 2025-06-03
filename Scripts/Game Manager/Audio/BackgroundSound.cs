@@ -29,6 +29,7 @@ public class BackgroundSound : MonoBehaviour
 
     private void Start()
     {
+        _citySource.Play();
         SubscribeToEvents();
     }
 

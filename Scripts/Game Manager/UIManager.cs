@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
+
     [SerializeField] private GameObject _menuUI;
     [SerializeField] private Image _background;
     [SerializeField] private GameObject _playerHpUI;
@@ -11,14 +13,22 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _hpText;
     [SerializeField] private Button _pauseButton;
     [SerializeField] private GameObject _pauseUI;
+    [SerializeField] private Button _skipCutsceneButton;
 
     private PlayerHealth _playerHealth;
 
     private void Awake()
     {
+        #region Initialization
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        #endregion
         _playerHealth = FindFirstObjectByType<PlayerHealth>();
-        ShowMenu();
-        ShowTitle();
+        ShowHomePage();
     }
 
     private void Start()
@@ -47,6 +57,7 @@ public class UIManager : MonoBehaviour
         ShowHUD();
         HideMenu();
         HideTitle();
+        HideSkipCutsceneButton();
     }
 
     private void GamePause()
@@ -62,6 +73,18 @@ public class UIManager : MonoBehaviour
         _pauseUI.SetActive(false);
         ShowHUD();
         HideBackground();
+        HideTitle();
+    }
+
+    public void ShowHomePage()
+    {
+        ShowMenu();
+        ShowTitle();
+    }
+
+    public void HideHomePage()
+    {
+        HideMenu();
         HideTitle();
     }
 
@@ -88,4 +111,7 @@ public class UIManager : MonoBehaviour
 
     private void ShowBackground() => _background.gameObject.SetActive(true);
     private void HideBackground() => _background.gameObject.SetActive(false);
+
+    public void ShowSkipCutsceneButton() => _skipCutsceneButton.gameObject.SetActive(true);
+    public void HideSkipCutsceneButton() => _skipCutsceneButton.gameObject.SetActive(false);
 }

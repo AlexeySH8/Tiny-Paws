@@ -28,9 +28,10 @@ public class CircleTransition : MonoBehaviour
         _blackScreen = GetComponentInChildren<Image>();
     }
 
-    public IEnumerator SceneTransition()
+    public IEnumerator SceneTransition(float duration = 0)
     {
         yield return CloseBlackScreenCoroutine();
+        yield return new WaitForSeconds(duration);
         OpenBlackScreen();
     }
 

@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [SerializeField] float _durationSceneTransition;
     public event Action OnGameStart;
     public event Action OnGameOver;
     public event Action OnGamePause;
@@ -14,25 +16,41 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        #region Initialization
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
+        #endregion
     }
 
-    public void GameStart() => OnGameStart?.Invoke();
+    public void GameStart() => StartCoroutine(GameStartCoroutine());
 
-    public void GameOver()
+    private IEnumerator GameStartCoroutine()
     {
-        StartCoroutine(GameOverCoroutine());
+        UIManager.Instance.HideHomePage();
+        yield return TimelineManager.Instance.OpeningCutscene();
+        OnGameStart?.Invoke();
     }
+
+    public void GameOver() => StartCoroutine(GameOverCoroutine());
 
     private IEnumerator GameOverCoroutine()
     {
         OnGameOver?.Invoke();
         yield return CircleTransition.Instance.SceneTransition(); // OpenBlackScreen() called in parallel
+        GameRestart();
+    }
+
+    public void FinishGame() => StartCoroutine(FinishGameCoroutine());
+
+    private IEnumerator FinishGameCoroutine()
+    {
+        OnGameOver?.Invoke();
+        TimelineManager.Instance.FinishCutscene();
+        yield return CircleTransition.Instance.SceneTransition(_durationSceneTransition); // OpenBlackScreen() called in parallel       
         GameRestart();
     }
 

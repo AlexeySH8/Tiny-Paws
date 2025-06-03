@@ -141,6 +141,8 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.CompareTag("Ladder"))
             EnterClimb();
+        if (collision.CompareTag("Dish"))
+            GameManager.Instance.FinishGame();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
