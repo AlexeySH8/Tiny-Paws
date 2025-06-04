@@ -29,8 +29,8 @@ public class GarbageSpawner : MonoBehaviour
     private float _yMinBorder = 40;
     private float _yMaxBorder = 340;
 
-    private float _minTimeToResp = 0.4f;
-    private float _maxTimeToResp = 0.8f;
+    private float _minTimeToResp = 0.3f;
+    private float _maxTimeToResp = 0.6f;
 
     private float _minReboundForce = 1.0f;
     private float _maxReboundForce = 13000.0f;

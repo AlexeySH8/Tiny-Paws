@@ -49,8 +49,9 @@ public class GameManager : MonoBehaviour
     private IEnumerator FinishGameCoroutine()
     {
         OnGameOver?.Invoke();
-        TimelineManager.Instance.FinishCutscene();
-        yield return CircleTransition.Instance.SceneTransition(_durationSceneTransition); // OpenBlackScreen() called in parallel       
+        yield return CircleTransition.Instance.CloseBlackScreenCoroutine();
+        yield return TimelineManager.Instance.FinishCutsceneCoroutine();
+        CircleTransition.Instance.OpenBlackScreen();
         GameRestart();
     }
 

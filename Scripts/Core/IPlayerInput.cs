@@ -1,7 +1,7 @@
 public interface IPlayerInput
 {
     float GetHorizontal();
-    float GetVertical();
+    //float GetVertical();
     bool IsJumpInput();
     bool IsJumpInputReleased();
 }

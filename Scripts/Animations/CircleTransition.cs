@@ -17,31 +17,32 @@ public class CircleTransition : MonoBehaviour
 
     private void Awake()
     {
+        #region Initialization
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
+        #endregion
         DontDestroyOnLoad(gameObject);
         _canvas = GetComponent<Canvas>();
         _blackScreen = GetComponentInChildren<Image>();
     }
 
-    public IEnumerator SceneTransition(float duration = 0)
+    public IEnumerator SceneTransition()
     {
         yield return CloseBlackScreenCoroutine();
-        yield return new WaitForSeconds(duration);
         OpenBlackScreen();
     }
 
-    private IEnumerator CloseBlackScreenCoroutine()
+    public IEnumerator CloseBlackScreenCoroutine()
     {
         DrawBlackScreen();
         yield return StartCoroutine(Transition(_closeDuration, 1f, 0f, false));
     }
 
-    private void OpenBlackScreen() => StartCoroutine(OpenBlackScreenCoroutine());
+    public void OpenBlackScreen() => StartCoroutine(OpenBlackScreenCoroutine());
 
     private IEnumerator OpenBlackScreenCoroutine()
     {

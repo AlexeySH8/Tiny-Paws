@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //public static PlayerController Instance { get; private set; }
+    [SerializeField] MobileInput _mobileInput;
 
     public PlayerState CurrentState { get; private set; }
     public float FaceDirection { get; private set; }
@@ -30,19 +30,11 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        //if (Instance != null && Instance != this)
-        //{
-        //    Destroy(gameObject);
-        //    return;
-        //}
-        //Instance = this;
         #region Input
-        // var mobileInput = FindObjectOfType<MobileInput>();
-
 #if UNITY_ANDROID || UNITY_IOS
-    _input = mobileInput;
+    _input = _mobileInput;
 #else
-        // mobileInput?.gameObject.SetActive(false);
+        _mobileInput.gameObject.SetActive(false);
         _input = new PCInput();
 #endif
         #endregion

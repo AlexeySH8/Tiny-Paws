@@ -48,25 +48,19 @@ public class TimelineManager : MonoBehaviour
         }
     }
 
-    public void FinishCutscene()
+    public IEnumerator FinishCutsceneCoroutine()
     {
-        string animationName = "Finish";
         _finishCutscene.SetActive(true);
-        Animator animator = _finishCutscene.GetComponent<Animator>();
-        float duration = GetAnimationDuration(animator, animationName);
-        StartCoroutine(FinishCutsceneCoroutine(duration));
-    }
-
-    public IEnumerator FinishCutsceneCoroutine(float duration)
-    {
         string animationName = "Finish";
         Animator animator = _finishCutscene.GetComponent<Animator>();
-
-        float timer = 0f;
         animator.Play(animationName, 0, 0);
+
+        float duration = GetAnimationDuration(animator, animationName);
+        float timer = 0f;
+
         while (timer < duration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
             yield return null;
         }
         _finishCutscene.SetActive(false);
@@ -76,7 +70,6 @@ public class TimelineManager : MonoBehaviour
     {
         RuntimeAnimatorController controller = animator.runtimeAnimatorController;
         float duration = 0f;
-
         foreach (var clip in controller.animationClips)
         {
             if (clip.name == animationName)
@@ -85,7 +78,6 @@ public class TimelineManager : MonoBehaviour
                 break;
             }
         }
-
         return duration;
     }
 

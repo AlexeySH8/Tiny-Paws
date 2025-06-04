@@ -20,6 +20,7 @@ public class BackgroundSound : MonoBehaviour
     private float _maxCityVolume;
     private float _maxSkyVolume;
     private bool _canUpdateVolume;
+    private bool _isRaining;
 
     private void Awake()
     {
@@ -42,13 +43,17 @@ public class BackgroundSound : MonoBehaviour
     private void SubscribeToEvents()
     {
         GameManager.Instance.OnGameStart += EnableUpdateVolume;
-        GameManager.Instance.OnGameStart += StartPlaySources;
+        GameManager.Instance.OnGameStart += PlaySources;
+        GameManager.Instance.OnGamePause += PauseSources;
+        GameManager.Instance.OnGameResume += PlaySources;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameStart -= EnableUpdateVolume;
-        GameManager.Instance.OnGameStart -= StartPlaySources;
+        GameManager.Instance.OnGameStart -= PlaySources;
+        GameManager.Instance.OnGamePause -= PauseSources;
+        GameManager.Instance.OnGameResume -= PlaySources;
     }
 
     private void UpdateVolumes()
@@ -78,14 +83,34 @@ public class BackgroundSound : MonoBehaviour
         _maxSkyVolume = _skySource.volume;
     }
 
-    private void StartPlaySources()
+    private void PlaySources()
     {
         _factorySource.Play();
         _citySource.Play();
         _skySource.Play();
+        if (_isRaining)
+            _rainSource.Play();
     }
 
-    public void StartRain() => _rainSource.Play();
+    private void PauseSources()
+    {
+        _factorySource.Pause();
+        _citySource.Pause();
+        _skySource.Pause();
+        _rainSource.Pause();
+    }
+
+    public void StartRain()
+    {
+        _isRaining = true;
+        _rainSource.Play();
+    }
+
+    public void StopRain()
+    {
+        _isRaining = false;
+        _rainSource.Stop();
+    }
 
     private void EnableUpdateVolume() => _canUpdateVolume = true;
 

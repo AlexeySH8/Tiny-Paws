@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -15,6 +12,7 @@ public class TimeManager : MonoBehaviour
             return;
         }
         Instance = this;
+        ResumeGame();
     }
 
     private void Start()
@@ -24,13 +22,13 @@ public class TimeManager : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        GameManager.Instance.OnGameStart += ResumeGame;
+        GameManager.Instance.OnGameOver += PauseGame;
         GameManager.Instance.OnGamePause += PauseGame;
         GameManager.Instance.OnGameResume += ResumeGame;
     }
     private void OnDisable()
     {
-        GameManager.Instance.OnGameStart -= ResumeGame;
+        GameManager.Instance.OnGameOver -= PauseGame;
         GameManager.Instance.OnGamePause -= PauseGame;
         GameManager.Instance.OnGameResume -= ResumeGame;
     }

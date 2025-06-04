@@ -6,6 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
+    [SerializeField] private GameObject _mobileInputUI;
     [SerializeField] private GameObject _menuUI;
     [SerializeField] private Image _background;
     [SerializeField] private GameObject _playerHpUI;
@@ -78,6 +79,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowHomePage()
     {
+        HideHUD();
         ShowMenu();
         ShowTitle();
     }
@@ -92,12 +94,18 @@ public class UIManager : MonoBehaviour
     {
         _pauseButton.gameObject.SetActive(true);
         _playerHpUI.SetActive(true);
+#if UNITY_ANDROID || UNITY_IOS
+        _mobileInputUI.SetActive(true);
+#endif
     }
 
     private void HideHUD()
     {
         _pauseButton.gameObject.SetActive(false);
         _playerHpUI.SetActive(false);
+#if UNITY_ANDROID || UNITY_IOS
+        _mobileInputUI.SetActive(false);
+#endif
     }
 
     private void UpdatePlayerHPText(int currentHP, int damageTaken) =>

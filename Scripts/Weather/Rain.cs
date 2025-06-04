@@ -46,17 +46,18 @@ public class Rain : MonoBehaviour
         {
             var waitBeforeRain = Random.Range(_minTimeToRain, _maxTimeToRain);
             yield return new WaitForSeconds(waitBeforeRain);
-            _backgroundMusic.StartRain();
             yield return StartRain();
         }
     }
 
     private IEnumerator StartRain()
     {
+        _backgroundMusic.StartRain();
         _rainParticleSystem.Play();
         yield return ChangeColor(_rainVolume.weight, _targetWeight, true);
         yield return new WaitForSeconds(_rainDuration);
-        _rainParticleSystem.Stop();
+        _backgroundMusic.StopRain();
+        _rainParticleSystem.Stop();;
         yield return ChangeColor(_rainVolume.weight, 0, false);
     }
 
