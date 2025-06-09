@@ -20,7 +20,7 @@ public abstract class BaseHealth : MonoBehaviour
             ReactToDeath();
     }
 
-    public abstract void ReactToDeath();
+    protected abstract void ReactToDeath();
 
     private bool IsDead() => currentHP <= 0;
 }

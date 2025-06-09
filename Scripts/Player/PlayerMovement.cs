@@ -25,12 +25,14 @@ public class PlayerMovement : MonoBehaviour
         if (isOnGround)
         {
             currentJumpCount = 0;
+            SFX.Instance.PlayPlayerJump(currentJumpCount);
             MakeJump();
         }
         else if (currentJumpCount < _maxJumpCount)
         {
-            MakeJump();
             currentJumpCount++;
+            SFX.Instance.PlayPlayerJump(currentJumpCount);
+            MakeJump();
         }
     }
 

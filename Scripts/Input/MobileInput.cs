@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MobileInput : MonoBehaviour, IPlayerInput
 {
+    private float _sensivity = 3f;
+    private float _horizontalInput;
     private bool _leftHeld;
     private bool _rightHeld;
     private bool _jumpPressed;
@@ -18,9 +21,15 @@ public class MobileInput : MonoBehaviour, IPlayerInput
 
     public float GetHorizontal()
     {
-        if (_leftHeld) return -1f;
-        if (_rightHeld) return 1f;
-        return 0f;
+        if (_rightHeld)
+            _horizontalInput += _sensivity * Time.deltaTime;
+        else if (_leftHeld)
+            _horizontalInput -= _sensivity * Time.deltaTime;
+        else
+            _horizontalInput = Mathf.MoveTowards(_horizontalInput, 0, _sensivity * Time.deltaTime);
+
+        _horizontalInput = Mathf.Clamp(_horizontalInput, -1f, 1f);
+        return _horizontalInput;
     }
 
     public bool IsJumpInput()

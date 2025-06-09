@@ -30,14 +30,11 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        #region Input
-#if UNITY_ANDROID || UNITY_IOS
-    _input = _mobileInput;
-#else
-        _mobileInput.gameObject.SetActive(false);
-        _input = new PCInput();
-#endif
-        #endregion
+        if (Application.isMobilePlatform)
+            _input = _mobileInput;
+        else
+            _input = new PCInput();
+
         _yPreviousPos = transform.position.y;
         _rb = GetComponent<Rigidbody2D>();
         _movement = GetComponent<PlayerMovement>();
@@ -55,12 +52,14 @@ public class PlayerController : MonoBehaviour
     {
         GameManager.Instance.OnGameStart += EnableMovement;
         GameManager.Instance.OnGameOver += DisableMovement;
+        GameManager.Instance.OnGameFinish += DisableMovement;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameStart -= EnableMovement;
         GameManager.Instance.OnGameOver -= DisableMovement;
+        GameManager.Instance.OnGameFinish -= DisableMovement;
     }
 
     private void Update()

@@ -23,12 +23,14 @@ public class TimeManager : MonoBehaviour
     private void SubscribeToEvents()
     {
         GameManager.Instance.OnGameOver += PauseGame;
+        GameManager.Instance.OnGameFinish += PauseGame;
         GameManager.Instance.OnGamePause += PauseGame;
         GameManager.Instance.OnGameResume += ResumeGame;
     }
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver -= PauseGame;
+        GameManager.Instance.OnGameFinish -= PauseGame;
         GameManager.Instance.OnGamePause -= PauseGame;
         GameManager.Instance.OnGameResume -= ResumeGame;
     }

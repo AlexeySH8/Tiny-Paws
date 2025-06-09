@@ -1797,11 +1797,10 @@ MonoBehaviour:
   _barrelPrefabs:
   - {fileID: 1751048078718955238, guid: 7679703be15ea01428c17128946225ae, type: 3}
   - {fileID: 1166192929044799987, guid: 40b63d89b77928e44beb8c07b19e38a4, type: 3}
-  _cartonChance: 50
-  _ironChance: 30
+  _cartonChance: 45
+  _ironChance: 35
   _barrelChance: 20
   _initialGarbageAmount: 30
-  _spawnDirection: -1
 --- !u!1 &145221009
 GameObject:
   m_ObjectHideFlags: 0
@@ -4799,6 +4798,8 @@ PlayableDirector:
     value: {fileID: 383826622}
   - key: {fileID: 1879475575721399507, guid: deb62d56a3cc21a44b4e464dbedf6807, type: 2}
     value: {fileID: 963194233}
+  - key: {fileID: 5593413864368454034, guid: deb62d56a3cc21a44b4e464dbedf6807, type: 2}
+    value: {fileID: 1584955895}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &585041468
@@ -8534,6 +8535,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _musics:
   - {fileID: 8300000, guid: d6162d7c125ce5d41b23791b49d783ea, type: 3}
+  - {fileID: 8300000, guid: 413645055c18ceb4984d9b135745fbda, type: 3}
+  - {fileID: 8300000, guid: 648f0a23d87fbd64486d6edb488dd806, type: 3}
 --- !u!1 &1230595740
 GameObject:
   m_ObjectHideFlags: 0
@@ -9732,6 +9735,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1584955892}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -11387,7 +11402,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 604269991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &1584955894
+--- !u!114 &1584955894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584955892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e291e998bc75349beba9d24b63d455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpSounds:
+  - {fileID: 8300000, guid: 0e0f7512758880745834dd341efb01f7, type: 3}
+  - {fileID: 8300000, guid: 3a5d816c254287748b4e036c187d866a, type: 3}
+  - {fileID: 8300000, guid: 41ec16e12061e4b47a43bd3e31046f54, type: 3}
+  _takeDamage: {fileID: 8300000, guid: 84f8184ea5405444eb8d94868f8b8544, type: 3}
+  _catPurring: {fileID: 8300000, guid: 098937f92798b9a419246fe4a7cdead9, type: 3}
+  _explosion: {fileID: 8300000, guid: b976fa7b8a952954e8687b4624dce164, type: 3}
+  _poisonLeak: {fileID: 8300000, guid: b3dda8c9fe4b44443baacab056e32169, type: 3}
+  _gameOver: {fileID: 8300000, guid: a0ebf4461e6d7744ebabe78251fa88d3, type: 3}
+  _gameFinish: {fileID: 8300000, guid: c1383c917d30b654b9146a7413d8abad, type: 3}
+  _clickButton: {fileID: 8300000, guid: 655c5aaca9c7f9640ba34a4d77b05bbf, type: 3}
+--- !u!82 &1584955895
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11483,19 +11521,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1584955895
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584955892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a64cbfde5cae934087c86545f7f04a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sfxSource: {fileID: 1584955894}
 --- !u!1 &1592482873
 GameObject:
   m_ObjectHideFlags: 0

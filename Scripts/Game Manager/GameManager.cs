@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float _durationSceneTransition;
     public event Action OnGameStart;
     public event Action OnGameOver;
+    public event Action OnGameFinish;
     public event Action OnGamePause;
     public event Action OnGameResume;
 
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator FinishGameCoroutine()
     {
-        OnGameOver?.Invoke();
+        OnGameFinish?.Invoke();
         yield return CircleTransition.Instance.CloseBlackScreenCoroutine();
         yield return TimelineManager.Instance.FinishCutsceneCoroutine();
         CircleTransition.Instance.OpenBlackScreen();

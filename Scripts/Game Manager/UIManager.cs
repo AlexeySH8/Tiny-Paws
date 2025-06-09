@@ -94,18 +94,16 @@ public class UIManager : MonoBehaviour
     {
         _pauseButton.gameObject.SetActive(true);
         _playerHpUI.SetActive(true);
-#if UNITY_ANDROID || UNITY_IOS
-        _mobileInputUI.SetActive(true);
-#endif
+        if (Application.isMobilePlatform)
+            _mobileInputUI.SetActive(true);
     }
 
     private void HideHUD()
     {
         _pauseButton.gameObject.SetActive(false);
         _playerHpUI.SetActive(false);
-#if UNITY_ANDROID || UNITY_IOS
-        _mobileInputUI.SetActive(false);
-#endif
+        if (Application.isMobilePlatform)
+            _mobileInputUI.SetActive(true);
     }
 
     private void UpdatePlayerHPText(int currentHP, int damageTaken) =>

@@ -21,7 +21,7 @@ public class CameraManager : MonoBehaviour
     {
         _setting = GetComponent<CameraSetting>();
         _shake = GetComponent<CameraShake>();
-        _shake.SetPlayerHealth(_player.GetComponent<PlayerHealth>());
+        _shake.Init(_player.GetComponent<PlayerHealth>());
     }
 
     private void Start()

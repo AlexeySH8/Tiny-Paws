@@ -6,31 +6,34 @@ public class PoisonBarrel : BaseBarrel
     [SerializeField] private GameObject _poisonEffectPref;
     [SerializeField] private float _poisonInterval = 1.0f;
 
-    public override void BarrelEffect() => PoisonLeak();
+    protected override AudioClip _soundEffect => SFX.Instance.PoisonLeak;
 
-    public override void ReactToDeath() => PoisonLeak();
+    protected override void BarrelEffect() => PoisonLeak();
+
+    protected override void ReactToDeath() => PoisonLeak();
 
     private void PoisonLeak()
     {
-        if (hasActivated) return;
-        hasActivated = true;
+        if (_hasActivated) return;
+        _hasActivated = true;
+        PlaySFX();
         Poison();
         Instantiate(_poisonEffectPref, transform);
-    }    
+    }
 
     private void Poison() => StartCoroutine(PoisonCoroutine());
 
     private IEnumerator PoisonCoroutine()
     {
-        while (hasActivated)
+        while (_hasActivated)
         {
             yield return new WaitForSeconds(_poisonInterval);
-            Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, radius);
+            Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, _radius);
             foreach (Collider2D collider in overlappedColliders)
             {
                 if (collider.TryGetComponent(out BaseHealth health))
-                    health.TakeDamage(damage);
+                    health.TakeDamage(_damage);
             }
         }
-    }   
+    }
 }

@@ -35,7 +35,7 @@ public class PlayerHealth : BaseHealth
 
     public void FallDamage(int fallDamageUnits) => TakeDamage(_fallDamage * fallDamageUnits);
 
-    public override void ReactToDeath()
+    protected override void ReactToDeath()
     {
         GameManager.Instance.GameOver();
     }

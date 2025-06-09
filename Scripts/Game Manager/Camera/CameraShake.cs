@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour
@@ -16,6 +17,11 @@ public class CameraShake : MonoBehaviour
 
     private Coroutine _shakeCoroutine;
     private PlayerHealth _playerHealth;
+
+    public void Init(PlayerHealth playerHealth)
+    {
+        _playerHealth = playerHealth;
+    }
 
     private void Start()
     {
@@ -60,10 +66,5 @@ public class CameraShake : MonoBehaviour
             yield return null;
         }
         ShakeOffset = Vector3.zero;
-    }
-
-    public void SetPlayerHealth(PlayerHealth playerHealth)
-    {
-        _playerHealth = playerHealth;
     }
 }

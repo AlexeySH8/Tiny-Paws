@@ -17,15 +17,17 @@ public class ExplosionBarrel : BaseBarrel
         _animator = GetComponent<Animator>();
     }
 
-    public override void BarrelEffect() => Explode();
+    protected override AudioClip _soundEffect => SFX.Instance.Explosion;
 
-    public override void ReactToDeath() => Explode();
+    protected override void BarrelEffect() => Explode();
+
+    protected override void ReactToDeath() => Explode();
 
     public void Explode()
     {
-        if (hasActivated) return;
-        hasActivated = true;
-        _animator.SetBool("HasActivated", hasActivated);
+        if (_hasActivated) return;
+        _hasActivated = true;
+        _animator.SetBool("HasActivated", _hasActivated);
         StartCoroutine(ExplodeCoroutine());
     }
 
@@ -33,13 +35,15 @@ public class ExplosionBarrel : BaseBarrel
     {
         yield return new WaitForSeconds(_delayBeforeExplosion);
 
-        Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, radius);
+        Collider2D[] overlappedColliders = Physics2D.OverlapCircleAll(transform.position, _radius);
 
         foreach (Collider2D collider in overlappedColliders)
             ApplyExplosionEffects(collider);
 
+        var clipDuration = PlaySFX();
         Instantiate(_explosionEffectPref, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        GetComponent<SpriteRenderer>().enabled = false;
+        Destroy(gameObject, clipDuration);
     }
 
     private void ApplyExplosionEffects(Collider2D collider)
@@ -57,6 +61,6 @@ public class ExplosionBarrel : BaseBarrel
         }
 
         if (collider.TryGetComponent(out BaseHealth health))
-            health.TakeDamage(damage);
+            health.TakeDamage(_damage);
     }
 }

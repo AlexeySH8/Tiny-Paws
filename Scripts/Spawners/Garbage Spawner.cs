@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class GarbageSpawner : MonoBehaviour
 {
-    public enum SpawnDirection
-    {
-        Left = -1,
-        Right = 1
-    }
-
     [Header("Prefab Lists")]
     [SerializeField] private List<GameObject> _cartonPrefabs;
     [SerializeField] private List<GameObject> _ironPrefabs;
@@ -22,15 +16,14 @@ public class GarbageSpawner : MonoBehaviour
     [SerializeField][Range(0, 100)] private int _barrelChance = 10;
 
     [SerializeField] private int _initialGarbageAmount;
-    [SerializeField] private SpawnDirection _spawnDirection;
     private Animator _animator;
 
     private float _xBorder = 30;
     private float _yMinBorder = 40;
     private float _yMaxBorder = 340;
 
-    private float _minTimeToResp = 0.3f;
-    private float _maxTimeToResp = 0.6f;
+    private float _minTimeToResp = 0.4f;
+    private float _maxTimeToResp = 0.7f;
 
     private float _minReboundForce = 1.0f;
     private float _maxReboundForce = 13000.0f;
@@ -119,7 +112,7 @@ public class GarbageSpawner : MonoBehaviour
     {
         var rb = instance.GetComponent<Rigidbody2D>();
 
-        rb.AddForce(new Vector2((float)_spawnDirection, 0) *
+        rb.AddForce(new Vector2(-1f, 0) *
             Random.Range(_minReboundForce, _maxReboundForce), ForceMode2D.Impulse);
 
         rb.AddTorque(Random.Range(-_maxTorqueForce, _maxTorqueForce), ForceMode2D.Impulse);
