@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] float _durationSceneTransition;
     public event Action OnGameStart;
     public event Action OnGameOver;
     public event Action OnGameFinish;

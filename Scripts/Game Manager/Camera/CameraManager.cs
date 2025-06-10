@@ -22,11 +22,11 @@ public class CameraManager : MonoBehaviour
         _setting = GetComponent<CameraSetting>();
         _shake = GetComponent<CameraShake>();
         _shake.Init(_player.GetComponent<PlayerHealth>());
+        _initialObservPos = new Vector3(0f, 5f, _setting.ZPosition);
     }
 
     private void Start()
     {
-        _initialObservPos = new Vector3(0f, 5f, _setting.ZPosition);
         SubscribeToEvents();
     }
 

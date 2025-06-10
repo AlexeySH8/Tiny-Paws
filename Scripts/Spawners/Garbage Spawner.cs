@@ -1,37 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GarbageSpawner : MonoBehaviour
 {
-    [Header("Prefab Lists")]
-    [SerializeField] private List<GameObject> _cartonPrefabs;
-    [SerializeField] private List<GameObject> _ironPrefabs;
-    [SerializeField] private List<GameObject> _barrelPrefabs;
+    [SerializeField] private List<GarbageType> _garbageTypes;
+    [Header("Spawn Settings")]
+    [SerializeField] private float _xBorder = 30;
+    [SerializeField] private float _yMinBorder = 40;
+    [SerializeField] private float _yMaxBorder = 340;
 
-    [Header("Spawn Chances (0-100)")]
-    [SerializeField][Range(0, 100)] private int _cartonChance = 60;
-    [SerializeField][Range(0, 100)] private int _ironChance = 30;
-    [SerializeField][Range(0, 100)] private int _barrelChance = 10;
+    [SerializeField] private float _minTimeToRespawn = 0.4f;
+    [SerializeField] private float _maxTimeToRespawn = 0.7f;
+
+    [SerializeField] private float _minReboundForce = 1.0f;
+    [SerializeField] private float _maxReboundForce = 13000.0f;
+    [SerializeField] private float _maxTorqueForce = 20;
 
     [SerializeField] private int _initialGarbageAmount;
     private Animator _animator;
 
-    private float _xBorder = 30;
-    private float _yMinBorder = 40;
-    private float _yMaxBorder = 340;
-
-    private float _minTimeToResp = 0.4f;
-    private float _maxTimeToResp = 0.7f;
-
-    private float _minReboundForce = 1.0f;
-    private float _maxReboundForce = 13000.0f;
-    private float _maxTorqueForce = 20;
+    private void Awake()
+    {
+#if UNITY_EDITOR
+        CheckTotalChance();
+#endif
+        _animator = GetComponentInParent<Animator>();
+    }
 
     private void Start()
     {
-        _animator = GetComponentInParent<Animator>();
         SubscribeToEvents();
     }
 
@@ -48,15 +46,15 @@ public class GarbageSpawner : MonoBehaviour
     private void StartSpawnGarbage()
     {
         LoadInitialGarbage();
-        SpawnGrbage();
+        SpawnGarbage();
     }
 
     private void LoadInitialGarbage()
     {
-        for (int i = 0; i <= _initialGarbageAmount; i++)
+        for (int i = 0; i < _initialGarbageAmount; i++)
         {
             var randomPos = new Vector3(
-                Random.Range(_xBorder, -_xBorder),
+                Random.Range(-_xBorder, _xBorder),
                 Random.Range(_yMinBorder, _yMaxBorder),
                 0);
             var garbagePrefab = GetRandomGarbagePrefab();
@@ -64,13 +62,13 @@ public class GarbageSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnGrbage() => StartCoroutine(SpawnGrbageCoroutine());
+    private void SpawnGarbage() => StartCoroutine(SpawnGarbageCoroutine());
 
-    private IEnumerator SpawnGrbageCoroutine()
+    private IEnumerator SpawnGarbageCoroutine()
     {
         while (true)
         {
-            float timeToNextObstacle = Random.Range(_minTimeToResp, _maxTimeToResp);
+            float timeToNextObstacle = Random.Range(_minTimeToRespawn, _maxTimeToRespawn);
             yield return new WaitForSeconds(timeToNextObstacle);
 
             _animator.Play("Garbage Disposal", 0, 0f);
@@ -80,7 +78,7 @@ public class GarbageSpawner : MonoBehaviour
             if (garbagePrefab != null)
             {
                 var instance = Instantiate(garbagePrefab, transform.position, garbagePrefab.transform.rotation);
-                ImpulseToGarbage(instance);
+                ApplyImpulseToGarbage(instance);
             }
         }
     }
@@ -88,27 +86,19 @@ public class GarbageSpawner : MonoBehaviour
     private GameObject GetRandomGarbagePrefab()
     {
         int random = Random.Range(0, 100);
+        int cumulative = 0;
 
-        if (random < _cartonChance && _cartonPrefabs.Count > 0)
+        foreach (var type in _garbageTypes)
         {
-            return _cartonPrefabs[Random.Range(0, _cartonPrefabs.Count)];
+            cumulative += type.Chance;
+            if (random < cumulative && type.Prefabs.Count > 0)
+                return type.Prefabs[Random.Range(0, type.Prefabs.Count)];
         }
-        else if (random < _cartonChance + _ironChance && _ironPrefabs.Count > 0)
-        {
-            return _ironPrefabs[Random.Range(0, _ironPrefabs.Count)];
-        }
-        else if (_barrelPrefabs.Count > 0)
-        {
-            return _barrelPrefabs[Random.Range(0, _barrelPrefabs.Count)];
-        }
-        else
-        {
-            Debug.LogError("The list of prefabs is empty");
-            return null;
-        }
+        Debug.LogWarning("No garbage prefab selected");
+        return null;
     }
 
-    private void ImpulseToGarbage(GameObject instance)
+    private void ApplyImpulseToGarbage(GameObject instance)
     {
         var rb = instance.GetComponent<Rigidbody2D>();
 
@@ -119,13 +109,13 @@ public class GarbageSpawner : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OnValidate()
+    private void CheckTotalChance()
     {
-        int total = _cartonChance + _ironChance + _barrelChance;
-        if (total != 100)
-        {
-            Debug.LogError($"The sum of the chances must be equal to 100, now: {total}");
-        }
+        int totalChance = 0;
+        foreach (var type in _garbageTypes)
+            totalChance += type.Chance;
+        if (totalChance != 100)
+            Debug.LogError($"Total spawn chance must be 100. Current: {totalChance}");
     }
 #endif
 }

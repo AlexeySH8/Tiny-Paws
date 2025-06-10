@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public int CurrentJumpCount { get; private set; }
+
     [SerializeField] private byte _maxJumpCount;
     [SerializeField] private float _moveSpeed; // 25
     [SerializeField] private float _jumpForce; // 30
@@ -20,18 +22,18 @@ public class PlayerMovement : MonoBehaviour
         _rb.velocity = new Vector2(horizontalInput * _moveSpeed, _rb.velocity.y);
     }
 
-    public void Jump(bool isOnGround, ref byte currentJumpCount)
+    public void Jump(bool isOnGround)
     {
         if (isOnGround)
         {
-            currentJumpCount = 0;
-            SFX.Instance.PlayPlayerJump(currentJumpCount);
+            ResetJumpCount();
+            SFX.Instance.PlayPlayerJump(CurrentJumpCount);
             MakeJump();
         }
-        else if (currentJumpCount < _maxJumpCount)
+        else if (CurrentJumpCount < _maxJumpCount)
         {
-            currentJumpCount++;
-            SFX.Instance.PlayPlayerJump(currentJumpCount);
+            CurrentJumpCount++;
+            SFX.Instance.PlayPlayerJump(CurrentJumpCount);
             MakeJump();
         }
     }
@@ -57,4 +59,6 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
     }
+
+    public void ResetJumpCount() => CurrentJumpCount = 0;
 }

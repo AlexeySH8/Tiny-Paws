@@ -28,12 +28,14 @@ public class UIManager : MonoBehaviour
         }
         Instance = this;
         #endregion
-        _playerHealth = FindFirstObjectByType<PlayerHealth>();
         ShowHomePage();
     }
 
     private void Start()
     {
+        _playerHealth = GameObject
+            .FindWithTag("Player")
+            .GetComponent<PlayerHealth>();
         SubscribeToEvents();
     }
 
@@ -103,7 +105,7 @@ public class UIManager : MonoBehaviour
         _pauseButton.gameObject.SetActive(false);
         _playerHpUI.SetActive(false);
         if (Application.isMobilePlatform)
-            _mobileInputUI.SetActive(true);
+            _mobileInputUI.SetActive(false);
     }
 
     private void UpdatePlayerHPText(int currentHP, int damageTaken) =>

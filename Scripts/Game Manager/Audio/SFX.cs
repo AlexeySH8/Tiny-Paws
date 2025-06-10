@@ -6,9 +6,6 @@ public class SFX : MonoBehaviour
 {
     public static SFX Instance { get; private set; }
 
-    private AudioSource _sfxSource;
-    private PlayerHealth _playerHealth;
-
     [Header("Player")]
     [SerializeField] private AudioClip[] _jumpSounds;
     [SerializeField] AudioClip _takeDamage;
@@ -22,6 +19,9 @@ public class SFX : MonoBehaviour
     [SerializeField] AudioClip _gameOver;
     [SerializeField] AudioClip _gameFinish;
     [SerializeField] AudioClip _clickButton;
+
+    private AudioSource _sfxSource;
+    private PlayerHealth _playerHealth;
 
 
     public AudioClip Explosion { get; private set; }
@@ -40,14 +40,14 @@ public class SFX : MonoBehaviour
         Explosion = _explosion;
         PoisonLeak = _poisonLeak;
         _sfxSource = GetComponent<AudioSource>();
-        _playerHealth = GameObject
-            .FindWithTag("Player")
-            .GetComponent<PlayerHealth>();
         SetSoundToButtons();
     }
 
     private void Start()
     {
+        _playerHealth = GameObject
+            .FindWithTag("Player")
+            .GetComponent<PlayerHealth>();
         SubscribeToEvents();
     }
 
@@ -67,7 +67,7 @@ public class SFX : MonoBehaviour
 
     #region Player
 
-    public void PlayPlayerJump(byte currentJumpCount)
+    public void PlayPlayerJump(int currentJumpCount)
     {
         AudioClip sound = currentJumpCount < _jumpSounds.Length ?
             _jumpSounds[currentJumpCount] : _jumpSounds[_jumpSounds.Length - 1];

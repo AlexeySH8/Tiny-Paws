@@ -13,7 +13,7 @@ public class BackgroundMusic : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
     }
 
-    private void Start()
+    public void Start()
     {
         SubscribeToEvents();
     }

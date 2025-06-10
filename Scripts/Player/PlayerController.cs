@@ -6,26 +6,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] MobileInput _mobileInput;
 
     public PlayerState CurrentState { get; private set; }
-    public float FaceDirection { get; private set; }
-    public LayerMask Ground;
 
-    [SerializeField] private float _fallDamageThreshold;
-    [SerializeField] private GameObject _groundCheck;
-
-    private float _minProcessedValue = 0.2f;
-    private float _yPreviousPos;
     private IPlayerInput _input;
-    private PlayerMovement _movement;
-    private PlayerHealth _health;
     private PlayerVisual _visual;
-    private Rigidbody2D _rb;
+    private PlayerMovement _movement;
+    private PlayerGroundChecker _groundChecker;
+    private PlayerStateResolver _stateResolver;
+    private PlayerLadderClimber _ladderClimber;
     private Coroutine _disableMovementCoroutine;
-    private float _faceLadderDirection;
     private float _horizontalInput;
-    private byte _currentJumpCount;
-    private float _groundCheckRadius;
     private bool _isJumpRequested;
-    private bool _isLadder;
     private bool _canMove;
 
     private void Awake()
@@ -35,12 +25,15 @@ public class PlayerController : MonoBehaviour
         else
             _input = new PCInput();
 
-        _yPreviousPos = transform.position.y;
-        _rb = GetComponent<Rigidbody2D>();
         _movement = GetComponent<PlayerMovement>();
+        _groundChecker = GetComponent<PlayerGroundChecker>();
+        _stateResolver = GetComponent<PlayerStateResolver>();
         _visual = GetComponentInChildren<PlayerVisual>();
-        _health = GetComponent<PlayerHealth>();
-        _groundCheckRadius = _groundCheck.GetComponent<CircleCollider2D>().radius;
+        _ladderClimber = GetComponent<PlayerLadderClimber>();
+
+        _ladderClimber.Init(_movement, _visual);
+        _visual.Init(this);
+        _groundChecker.Init(_movement);
     }
 
     private void Start()
@@ -67,8 +60,7 @@ public class PlayerController : MonoBehaviour
         if (_canMove)
         {
             _horizontalInput = _input.GetHorizontal();
-            if (_horizontalInput != 0)
-                FaceDirection = Mathf.Sign(_horizontalInput);
+            _visual.FlipFace(_horizontalInput);
 
             if (_input.IsJumpInput())
                 _isJumpRequested = true;
@@ -76,62 +68,31 @@ public class PlayerController : MonoBehaviour
             if (_input.IsJumpInputReleased())
                 _movement.HandleJumpRelease();
         }
-        UpdateState();
+        CurrentState = _stateResolver.GetCurrentState(IsOnGround(), 
+            _ladderClimber.IsOnLadder, _horizontalInput);
     }
 
     private void FixedUpdate()
     {
-        if (_canMove)
-        {
-            if (_isJumpRequested)
-            {
-                _isJumpRequested = false;
-                _isLadder = false;
-                _movement.Jump(IsOnGround(), ref _currentJumpCount);
-            }
-            if (_isLadder)
-                _movement.Climb(_horizontalInput, _faceLadderDirection);
-            else
-                _movement.Move(_horizontalInput);
-        }
-    }
+        if (!_canMove) return;
 
-    private void UpdateState()
-    {
-        if (!IsOnGround())
+        if (_isJumpRequested)
         {
-            if (_rb.velocity.y > _minProcessedValue)
-                CurrentState = PlayerState.Jumping;
-            else if (_rb.velocity.y < -_minProcessedValue)
-                CurrentState = PlayerState.Falling;
+            _isJumpRequested = false;
+            _ladderClimber.ExitLadder();
+            _movement.Jump(IsOnGround());
         }
+        if (_ladderClimber.IsOnLadder)
+            _ladderClimber.Climb(_horizontalInput);
         else
-        {
-            if (Mathf.Abs(_horizontalInput) > _minProcessedValue || _isLadder)
-                CurrentState = PlayerState.Running;
-            else
-                CurrentState = PlayerState.Idle;
-        }
-    }
-
-    public bool IsOnGround()
-    {
-        var result = Physics2D.OverlapCircle(_groundCheck.transform.position, _groundCheckRadius, Ground);
-        if (result)
-        {
-            var height = _yPreviousPos - transform.position.y;
-            if (height > _fallDamageThreshold)
-                _health.FallDamage((int)Mathf.Floor(height / _fallDamageThreshold));
-            _currentJumpCount = 0;
-            _yPreviousPos = transform.position.y;
-        }
-        return result;
+            _movement.Move(_horizontalInput);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Ladder"))
-            EnterClimb();
+            _ladderClimber.EnterLadder(_horizontalInput);
+
         if (collision.CompareTag("Dish"))
             GameManager.Instance.FinishGame();
     }
@@ -139,21 +100,7 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Ladder"))
-            ExitClimb();
-    }
-
-    private void EnterClimb()
-    {
-        _isLadder = true;
-        _visual.EnterClimb(FaceDirection);
-        _faceLadderDirection = FaceDirection;
-    }
-
-    private void ExitClimb()
-    {
-        _isLadder = false;
-        _movement.ExitClimb();
-        _visual.ExitClimb();
+            _ladderClimber.ExitLadder();
     }
 
     public void DisableMovementTemporarily(float duration)
@@ -170,6 +117,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(duration);
         EnableMovement();
     }
+
+    public bool IsOnGround() => _groundChecker.CheckGrounded();
 
     public void EnableMovement() => _canMove = true;
 
