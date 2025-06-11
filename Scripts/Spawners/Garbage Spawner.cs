@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GarbageSpawner : MonoBehaviour
 {
+    const int TotalChance = 100;
+
     [SerializeField] private List<GarbageType> _garbageTypes;
-    [Header("Spawn Settings")]
+
     [SerializeField] private float _xBorder = 30;
     [SerializeField] private float _yMinBorder = 40;
     [SerializeField] private float _yMaxBorder = 340;
@@ -13,12 +15,10 @@ public class GarbageSpawner : MonoBehaviour
     [SerializeField] private float _minTimeToRespawn = 0.4f;
     [SerializeField] private float _maxTimeToRespawn = 0.7f;
 
-    [SerializeField] private float _minReboundForce = 1.0f;
-    [SerializeField] private float _maxReboundForce = 13000.0f;
-    [SerializeField] private float _maxTorqueForce = 20;
-
     [SerializeField] private int _initialGarbageAmount;
+
     private Animator _animator;
+    private GarbageImpulse _garbageImpulse;
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class GarbageSpawner : MonoBehaviour
         CheckTotalChance();
 #endif
         _animator = GetComponentInParent<Animator>();
+        _garbageImpulse = GetComponent<GarbageImpulse>();
     }
 
     private void Start()
@@ -78,14 +79,14 @@ public class GarbageSpawner : MonoBehaviour
             if (garbagePrefab != null)
             {
                 var instance = Instantiate(garbagePrefab, transform.position, garbagePrefab.transform.rotation);
-                ApplyImpulseToGarbage(instance);
+                _garbageImpulse.ApplyImpulseToGarbage(instance);
             }
         }
     }
 
     private GameObject GetRandomGarbagePrefab()
     {
-        int random = Random.Range(0, 100);
+        int random = Random.Range(0, TotalChance);
         int cumulative = 0;
 
         foreach (var type in _garbageTypes)
@@ -96,17 +97,7 @@ public class GarbageSpawner : MonoBehaviour
         }
         Debug.LogWarning("No garbage prefab selected");
         return null;
-    }
-
-    private void ApplyImpulseToGarbage(GameObject instance)
-    {
-        var rb = instance.GetComponent<Rigidbody2D>();
-
-        rb.AddForce(new Vector2(-1f, 0) *
-            Random.Range(_minReboundForce, _maxReboundForce), ForceMode2D.Impulse);
-
-        rb.AddTorque(Random.Range(-_maxTorqueForce, _maxTorqueForce), ForceMode2D.Impulse);
-    }
+    }   
 
 #if UNITY_EDITOR
     private void CheckTotalChance()
@@ -114,7 +105,7 @@ public class GarbageSpawner : MonoBehaviour
         int totalChance = 0;
         foreach (var type in _garbageTypes)
             totalChance += type.Chance;
-        if (totalChance != 100)
+        if (totalChance != TotalChance)
             Debug.LogError($"Total spawn chance must be 100. Current: {totalChance}");
     }
 #endif
