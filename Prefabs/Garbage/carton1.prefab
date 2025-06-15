@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5379207743084453931}
   - component: {fileID: 2858421772761865875}
   - component: {fileID: 3350700185393470882}
-  - component: {fileID: 703187137666163606}
   m_Layer: 3
   m_Name: carton1
   m_TagString: Untagged
@@ -159,15 +158,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &703187137666163606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3963041977213129340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997aed463e7da9b42bf9c4582e0ebffd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

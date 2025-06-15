@@ -19,6 +19,7 @@ public class GarbageSpawner : MonoBehaviour
 
     private Animator _animator;
     private GarbageImpulse _garbageImpulse;
+    private ObjectPool _objectPool;
 
     private void Awake()
     {
@@ -27,6 +28,8 @@ public class GarbageSpawner : MonoBehaviour
 #endif
         _animator = GetComponentInParent<Animator>();
         _garbageImpulse = GetComponent<GarbageImpulse>();
+        _objectPool = GetComponentInParent<ObjectPool>();
+        _objectPool.Init(_garbageTypes);
     }
 
     private void Start()
@@ -59,7 +62,7 @@ public class GarbageSpawner : MonoBehaviour
                 Random.Range(_yMinBorder, _yMaxBorder),
                 0);
             var garbagePrefab = GetRandomGarbagePrefab();
-            Instantiate(garbagePrefab, randomPos, garbagePrefab.transform.rotation);
+            _objectPool.Get(garbagePrefab, randomPos, garbagePrefab.transform.rotation);
         }
     }
 
@@ -78,7 +81,7 @@ public class GarbageSpawner : MonoBehaviour
 
             if (garbagePrefab != null)
             {
-                var instance = Instantiate(garbagePrefab, transform.position, garbagePrefab.transform.rotation);
+                var instance = _objectPool.Get(garbagePrefab, transform.position,garbagePrefab.transform.rotation);
                 _garbageImpulse.ApplyImpulseToGarbage(instance);
             }
         }
@@ -97,7 +100,7 @@ public class GarbageSpawner : MonoBehaviour
         }
         Debug.LogWarning("No garbage prefab selected");
         return null;
-    }   
+    }
 
 #if UNITY_EDITOR
     private void CheckTotalChance()

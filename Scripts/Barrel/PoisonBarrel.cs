@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PoisonBarrel : BaseBarrel
 {
-    [SerializeField] private GameObject _poisonEffectPref;
+    [SerializeField] private GameObject _poisonEffect;
     [SerializeField] private float _poisonInterval = 1.0f;
 
     protected override AudioClip _soundEffect => SFX.Instance.PoisonLeak;
@@ -18,7 +18,7 @@ public class PoisonBarrel : BaseBarrel
         _hasActivated = true;
         PlaySFX();
         Poison();
-        Instantiate(_poisonEffectPref, transform);
+        _poisonEffect.SetActive(true);
     }
 
     private void Poison() => StartCoroutine(PoisonCoroutine());
@@ -35,5 +35,14 @@ public class PoisonBarrel : BaseBarrel
                     health.TakeDamage(_damage);
             }
         }
+    }
+
+    public override void ResetState()
+    {
+        ResetHealth();
+        _hasActivated = false;
+        StopSFX();
+        _poisonEffect.SetActive(false);
+        StopAllCoroutines();
     }
 }

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1860460241852411930}
   - component: {fileID: 810478863349049260}
   - component: {fileID: 9210204412979420829}
-  - component: {fileID: 6350421905523702588}
   m_Layer: 3
   m_Name: iron box1
   m_TagString: Untagged
@@ -159,15 +158,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.2121754, y: 3.075026}
   m_EdgeRadius: 0
---- !u!114 &6350421905523702588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2175439669469085325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997aed463e7da9b42bf9c4582e0ebffd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

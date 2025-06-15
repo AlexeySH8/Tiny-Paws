@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ScaleTransition : MonoBehaviour
 {
-    [SerializeField] float _duration = 0.2f;
+    [SerializeField] float _duration = 0.05f;
     [SerializeField] float _delay;
     [SerializeField] private AnimationCurve _curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
@@ -17,9 +17,6 @@ public class ScaleTransition : MonoBehaviour
     private void OnEnable()
     {
         transform.localScale = Vector3.zero;
-        float elapsed = 0;
-        while (elapsed < _delay)
-            elapsed += Time.unscaledDeltaTime;
         StartCoroutine(ScaleInWithDelay());
     }
 
@@ -36,13 +33,15 @@ public class ScaleTransition : MonoBehaviour
 
     private IEnumerator ScaleIn()
     {
+        yield return new WaitForSecondsRealtime(_delay);
+
         float elapsed = 0;
         while (elapsed < _duration)
         {
             elapsed += Time.unscaledDeltaTime;
             float time = Mathf.Clamp01(elapsed / _duration);
             float curveValue = _curve.Evaluate(time);
-            transform.localScale = Vector3.Lerp(Vector3.zero, _targetScale, time);
+            transform.localScale = Vector3.Lerp(Vector3.zero, _targetScale, curveValue);
             yield return null;
         }
         transform.localScale = _targetScale;

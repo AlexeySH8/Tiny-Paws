@@ -19,6 +19,8 @@ public abstract class BaseBarrel : BaseHealth
 
     protected abstract void BarrelEffect();
 
+    public abstract void ResetState();
+
     private void SelfActivated() => StartCoroutine(SelfActivatedCoroutine());
 
     private IEnumerator SelfActivatedCoroutine()
@@ -43,6 +45,11 @@ public abstract class BaseBarrel : BaseHealth
     {
         _sfxSource.Play();
         return _sfxSource.clip.length;
+    }
+
+    protected void StopSFX()
+    {
+        _sfxSource.Stop();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

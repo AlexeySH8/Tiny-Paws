@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7185506767374412332}
   - component: {fileID: 4275025722584773451}
   - component: {fileID: 264544353085363939}
-  - component: {fileID: 2631172847157836531}
   m_Layer: 3
   m_Name: iron balk
   m_TagString: Untagged
@@ -159,15 +158,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.078059, y: 1.340596}
   m_EdgeRadius: 0
---- !u!114 &2631172847157836531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012796434373893387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997aed463e7da9b42bf9c4582e0ebffd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

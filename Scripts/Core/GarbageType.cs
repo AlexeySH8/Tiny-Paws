@@ -9,4 +9,3 @@ public class GarbageType
     [Range(0, 100)] public int Chance;
     public List<GameObject> Prefabs;
 }
-

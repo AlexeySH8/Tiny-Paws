@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class ExplosionBarrel : BaseBarrel
+public class ExplosionBarrel : BaseBarrel, IPoolHandler
 {
     [SerializeField] private float _force;
     [SerializeField] private GameObject _explosionEffectPref;
@@ -10,11 +10,17 @@ public class ExplosionBarrel : BaseBarrel
     private float _offsetForPlayer = 3f;
     private float _disableMovementDuration = 0.5f;
     private Animator _animator;
+    private ObjectPool _objectPool;
 
     protected override void Start()
     {
         base.Start();
         _animator = GetComponent<Animator>();
+    }
+
+    public void Init(ObjectPool pool)
+    {
+        _objectPool = pool;
     }
 
     protected override AudioClip _soundEffect => SFX.Instance.Explosion;
@@ -40,10 +46,11 @@ public class ExplosionBarrel : BaseBarrel
         foreach (Collider2D collider in overlappedColliders)
             ApplyExplosionEffects(collider);
 
-        var clipDuration = PlaySFX();
+        var durationSFX = PlaySFX();
         Instantiate(_explosionEffectPref, transform.position, Quaternion.identity);
         GetComponent<SpriteRenderer>().enabled = false;
-        Destroy(gameObject, clipDuration);
+        yield return new WaitForSeconds(durationSFX);
+        _objectPool.Release(gameObject);
     }
 
     private void ApplyExplosionEffects(Collider2D collider)
@@ -62,5 +69,13 @@ public class ExplosionBarrel : BaseBarrel
 
         if (collider.TryGetComponent(out BaseHealth health))
             health.TakeDamage(_damage);
+    }
+
+    public override void ResetState()
+    {
+        ResetHealth();
+        _hasActivated = false;
+        _animator.SetBool("HasActivated", _hasActivated);
+        StopAllCoroutines();
     }
 }
