@@ -55,7 +55,9 @@ public class Rain : MonoBehaviour
         _backgroundMusic.StartRain();
         _rainParticleSystem.Play();
         yield return ChangeColor(_rainVolume.weight, _targetWeight, true);
+
         yield return new WaitForSeconds(_rainDuration);
+
         _backgroundMusic.StopRain();
         _rainParticleSystem.Stop();;
         yield return ChangeColor(_rainVolume.weight, 0, false);

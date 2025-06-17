@@ -17,12 +17,12 @@ public class PlayerHealthVisual : MonoBehaviour
 
     private void Start()
     {
-        _playerHealth.OnPlayerTakeDamage += PlayerTakeDamage;
+        _playerHealth.OnPlayerHPChanged += PlayerTakeDamage;
     }
 
     private void OnDisable()
     {
-        _playerHealth.OnPlayerTakeDamage -= PlayerTakeDamage;
+        _playerHealth.OnPlayerHPChanged -= PlayerTakeDamage;
     }
 
     private void PlayerTakeDamage(int currentHP, int damageTaken)

@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 3
-  _radius: 10
+  _radius: 12
   _damage: 3
   _force: 200000
   _explosionEffectPref: {fileID: 2181408092534801807, guid: 695f323d512abef4983c481ce5eeac40, type: 3}

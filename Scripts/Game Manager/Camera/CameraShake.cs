@@ -33,12 +33,12 @@ public class CameraShake : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        _playerHealth.OnPlayerTakeDamage += Shake;
+        _playerHealth.OnPlayerHPChanged += Shake;
     }
 
     private void OnDisable()
     {
-        _playerHealth.OnPlayerTakeDamage -= Shake;
+        _playerHealth.OnPlayerHPChanged -= Shake;
     }
 
     private void Shake(int currentHP, int damageTaken)
@@ -57,12 +57,11 @@ public class CameraShake : MonoBehaviour
         float elapsed = 0;
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
 
             float x = Random.Range(-1f, 1f) * magnitude;
             float y = Random.Range(-1f, 1f) * magnitude;
             ShakeOffset = new Vector3(x, y, 0);
-
             yield return null;
         }
         ShakeOffset = Vector3.zero;

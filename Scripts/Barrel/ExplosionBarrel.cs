@@ -75,6 +75,7 @@ public class ExplosionBarrel : BaseBarrel, IPoolHandler
     {
         ResetHealth();
         _hasActivated = false;
+        GetComponent<SpriteRenderer>().enabled = true;
         _animator.SetBool("HasActivated", _hasActivated);
         StopAllCoroutines();
     }

@@ -22,7 +22,7 @@ public abstract class BaseHealth : MonoBehaviour
 
     protected abstract void ReactToDeath();
 
-    protected void ResetHealth() => currentHP = maxHealth;
+    protected virtual void ResetHealth() => currentHP = maxHealth;
 
     private bool IsDead() => currentHP <= 0;
 }

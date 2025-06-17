@@ -55,14 +55,14 @@ public class SFX : MonoBehaviour
     {
         GameManager.Instance.OnGameOver += PlayGameOver;
         GameManager.Instance.OnGameFinish += PlayGameFinish;
-        _playerHealth.OnPlayerTakeDamage += PlayPlayerTakeDamage;
+        _playerHealth.OnPlayerHPChanged += PlayPlayerTakeDamage;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameOver -= PlayGameOver;
         GameManager.Instance.OnGameFinish -= PlayGameFinish;
-        _playerHealth.OnPlayerTakeDamage -= PlayPlayerTakeDamage;
+        _playerHealth.OnPlayerHPChanged -= PlayPlayerTakeDamage;
     }
 
     #region Player

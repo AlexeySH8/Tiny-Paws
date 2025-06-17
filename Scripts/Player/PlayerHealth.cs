@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerHealth : BaseHealth
 {
-    public event Action<int, int> OnPlayerTakeDamage;
+    public event Action<int, int> OnPlayerHPChanged;
 
     [SerializeField] private int _fallDamage;
     [SerializeField] private bool _canTakeDamage;
@@ -29,7 +29,7 @@ public class PlayerHealth : BaseHealth
         if (_canTakeDamage)
         {
             base.TakeDamage(damage);
-            OnPlayerTakeDamage.Invoke(currentHP, damage);
+            OnPlayerHPChanged.Invoke(currentHP, damage);
         }
     }
 
@@ -37,7 +37,19 @@ public class PlayerHealth : BaseHealth
 
     protected override void ReactToDeath()
     {
-        GameManager.Instance.GameOver();
+        AdManager.Instance.LaunchRewardedAd(rewardReceived =>
+        {
+            if (rewardReceived)
+                ResetHealth();
+            else
+                GameManager.Instance.GameOver();
+        });
+    }
+
+    protected override void ResetHealth()
+    {
+        base.ResetHealth();
+        OnPlayerHPChanged.Invoke(currentHP, 0);
     }
 
     private void EnableTakeDamage() => _canTakeDamage = true;
